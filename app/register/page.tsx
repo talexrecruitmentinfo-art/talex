@@ -119,7 +119,6 @@ export default function RegisterPage() {
             <Link href="/login" className="font-semibold text-brand-500 hover:text-brand-600">
               Sign in existing account
             </Link>
-            </Link>
           </div>
         </div>
       </div>
