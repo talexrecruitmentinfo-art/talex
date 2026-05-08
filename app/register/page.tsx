@@ -10,6 +10,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { getErrorMessage } from '@/utils/helpers';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -37,7 +38,7 @@ export default function RegisterPage() {
       toast.success('Account created successfully!');
       router.push('/dashboard/profile');
     } catch (err: unknown) {
-      console.log((err as any).response?.data);
+      console.log(getErrorMessage(err));
       toast.error(error || 'Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);

@@ -59,3 +59,25 @@ export function calculateProfileCompletion(profile: Record<string, any>): number
 
   return Math.round((completedFields / requiredFields.length) * 100);
 }
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+export function getErrorMessage(error: unknown, fallback = 'An unexpected error occurred.'): string {
+  if (!isRecord(error)) return fallback;
+
+  const response = error.response;
+  if (isRecord(response)) {
+    const data = response.data;
+    if (isRecord(data)) {
+      const message = data.message;
+      if (typeof message === 'string') return message;
+    }
+  }
+
+  const message = error.message;
+  if (typeof message === 'string') return message;
+
+  return fallback;
+}

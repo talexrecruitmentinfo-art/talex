@@ -4,6 +4,7 @@ import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { supportService } from '@/services/apiService';
+import { getErrorMessage } from '@/utils/helpers';
 
 export default function ContactPage() {
   const [name, setName] = useState('');
@@ -37,7 +38,7 @@ export default function ContactPage() {
       setSubject('');
       setMessage('');
     } catch (error: unknown) {
-      const message = (error as any)?.response?.data?.message || (error as any)?.message || 'Unable to send your request right now.';
+      const message = getErrorMessage(error, 'Unable to send your request right now.');
       setFormError(message);
       toast.error(message);
     } finally {

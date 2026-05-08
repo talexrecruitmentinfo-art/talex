@@ -4,6 +4,7 @@ import { ChangeEvent, useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { uploadService } from '@/services/apiService';
+import { getErrorMessage } from '@/utils/helpers';
 
 export default function ResumeUploadPage() {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
@@ -56,7 +57,7 @@ export default function ResumeUploadPage() {
       toast.success('Resume uploaded successfully!');
       setResumeFile(null);
     } catch (error: unknown) {
-      setUploadError((error as any)?.message || 'Resume upload failed.');
+      setUploadError(getErrorMessage(error, 'Resume upload failed.'));
       toast.error('Resume upload failed.');
     } finally {
       setUploading(false);

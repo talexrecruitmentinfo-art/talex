@@ -82,7 +82,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-900">9. Children's Privacy</h2>
+          <h2 className="text-lg font-semibold text-slate-900">9. Children&apos;s Privacy</h2>
           <p>
             Our platform is not intended for users under 18 years old. We do not knowingly collect information from minors. If we become aware of such collection, we will delete it immediately.
           </p>

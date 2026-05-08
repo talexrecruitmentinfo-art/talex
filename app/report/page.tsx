@@ -3,6 +3,7 @@
 import { FormEvent, useState } from 'react';
 import { toast } from 'sonner';
 import { reportService } from '@/services/apiService';
+import { getErrorMessage } from '@/utils/helpers';
 
 interface ReportQuestion {
   id: string;
@@ -63,7 +64,7 @@ export default function ReportPage() {
       setName('');
       setEmail('');
     } catch (error: unknown) {
-      const message = (error as any)?.response?.data?.message || (error as any)?.message || 'Unable to submit your report right now.';
+      const message = getErrorMessage(error, 'Unable to submit your report right now.');
       setFormError(message);
       toast.error(message);
     } finally {
