@@ -1,4 +1,54 @@
+'use client';
+
+import { FormEvent, useState } from 'react';
+import { toast } from 'sonner';
+
 export default function ContactPage() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://backendtalex.onrender.com/api/jobs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          subject,
+          message,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (!response.ok) {
+        toast.error('Failed to send message. Please try again later.');
+        return;
+      }
+
+      toast.success('Message sent successfully!');
+      setName('');
+      setEmail('');
+      setSubject('');
+      setMessage('');
+    } catch (error) {
+      console.error(error);
+      toast.error('Unable to send message right now.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="space-y-6 rounded-[32px] border border-slate-200 bg-white p-8 shadow-card">
       <div>
@@ -18,7 +68,42 @@ export default function ContactPage() {
       </div>
       <div className="space-y-4">
         <h2 className="text-xl font-semibold text-slate-900">Send us a message</h2>
-        <form className="space-y-4" action="mailto:talex.recruitment.info@gmail.com" method="post" encType="text/plain">
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <label htmlFor="name" className="block text-sm font-medium text-slate-700">
+                Full name
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                placeholder="John Doe"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                disabled={isSubmitting}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+                Email address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                disabled={isSubmitting}
+                required
+              />
+            </div>
+          </div>
+
           <div className="space-y-2">
             <label htmlFor="subject" className="block text-sm font-medium text-slate-700">
               Subject
@@ -29,6 +114,9 @@ export default function ContactPage() {
               type="text"
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
               placeholder="Enter subject"
+              value={subject}
+              onChange={(event) => setSubject(event.target.value)}
+              disabled={isSubmitting}
               required
             />
           </div>
@@ -38,18 +126,22 @@ export default function ContactPage() {
             </label>
             <textarea
               id="message"
-              name="body"
+              name="message"
               rows={4}
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
               placeholder="Enter your message"
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              disabled={isSubmitting}
               required
             />
           </div>
           <button
             type="submit"
-            className="w-full rounded-lg bg-brand-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-600"
+            disabled={isSubmitting}
+            className="w-full rounded-lg bg-brand-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Send Email
+            {isSubmitting ? 'Sending...' : 'Send Message'}
           </button>
         </form>
       </div>
