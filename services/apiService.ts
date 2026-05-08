@@ -57,7 +57,7 @@ export const jobServiceAPI = {
   },
 
   create: async (data: any): Promise<Job> => {
-    const res = await API.post('/jobs', data);
+    const res = await API.post('/admin/jobs/create', data);
     return res.data;
   },
 
@@ -95,6 +95,27 @@ export const applicationService = {
       applicationId: id,
       status,
     });
+    return res.data;
+  },
+};
+
+/**
+ * Support Service
+ */
+export const supportService = {
+  create: async (data: {
+    category: string;
+    subject: string;
+    message: string;
+    name: string;
+    email: string;
+  }): Promise<any> => {
+    const res = await API.post('/support', data);
+    return res.data;
+  },
+
+  getAll: async (): Promise<any[]> => {
+    const res = await API.get('/support');
     return res.data;
   },
 };
@@ -150,7 +171,7 @@ export const uploadService = {
   uploadResume: async (file: File): Promise<any> => {
     const formData = new FormData();
     formData.append('resume', file);
-    const res = await API.post('/upload/upload-resume', formData, {
+    const res = await API.post('/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -179,6 +200,16 @@ export const adminService = {
 
   updateApplicationStatus: async (applicationId: string, status: ApplicationStatus): Promise<Application> => {
     const res = await API.patch('/admin/applications/update-status', { applicationId, status });
+    return res.data;
+  },
+
+  getSupportRequests: async (): Promise<any[]> => {
+    const res = await API.get('/admin/support-requests');
+    return res.data;
+  },
+
+  replySupportRequest: async (requestId: string, reply: string): Promise<any> => {
+    const res = await API.patch('/admin/support-requests/reply', { requestId, reply });
     return res.data;
   },
 

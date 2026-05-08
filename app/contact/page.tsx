@@ -3,48 +3,44 @@
 import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { supportService } from '@/services/apiService';
 
 export default function ContactPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [category, setCategory] = useState('Support');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [formSuccess, setFormSuccess] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
+    setFormError(null);
+    setFormSuccess(null);
 
     try {
-      const response = await fetch('https://backendtalex.onrender.com/api/jobs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          subject,
-          message,
-        }),
+      await supportService.create({
+        name,
+        email,
+        category,
+        subject,
+        message,
       });
 
-      const data = await response.json();
-      console.log(data);
-
-      if (!response.ok) {
-        toast.error('Failed to send message. Please try again later.');
-        return;
-      }
-
-      toast.success('Message sent successfully!');
+      toast.success('Support request submitted successfully!');
+      setFormSuccess('Your request has been sent. We will contact you shortly.');
       setName('');
       setEmail('');
+      setCategory('Support');
       setSubject('');
       setMessage('');
-    } catch (error) {
-      console.error(error);
-      toast.error('Unable to send message right now.');
+    } catch (error: any) {
+      const message = error?.response?.data?.message || error?.message || 'Unable to send your request right now.';
+      setFormError(message);
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -105,22 +101,40 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="subject" className="block text-sm font-medium text-slate-700">
-              Subject
-            </label>
-            <input
-              id="subject"
-              name="subject"
-              type="text"
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
-              placeholder="Enter subject"
-              value={subject}
-              onChange={(event) => setSubject(event.target.value)}
-              disabled={isSubmitting}
-              required
-            />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <label htmlFor="category" className="block text-sm font-medium text-slate-700">
+                Category
+              </label>
+              <select
+                id="category"
+                value={category}
+                onChange={(event) => setCategory(event.target.value)}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                disabled={isSubmitting}
+              >
+                <option value="Support">Support</option>
+                <option value="Issue">Issue</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="subject" className="block text-sm font-medium text-slate-700">
+                Subject
+              </label>
+              <input
+                id="subject"
+                name="subject"
+                type="text"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                placeholder="Enter subject"
+                value={subject}
+                onChange={(event) => setSubject(event.target.value)}
+                disabled={isSubmitting}
+                required
+              />
+            </div>
           </div>
+
           <div className="space-y-2">
             <label htmlFor="message" className="block text-sm font-medium text-slate-700">
               Message
@@ -137,6 +151,19 @@ export default function ContactPage() {
               required
             />
           </div>
+
+          {formError && (
+            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              {formError}
+            </div>
+          )}
+
+          {formSuccess && (
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700">
+              {formSuccess}
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={isSubmitting}
