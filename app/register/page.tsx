@@ -33,13 +33,6 @@ export default function RegisterPage() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="phone" className="block text-sm font-medium text-slate-700">
-                  Phone number
-                </label>
-                <Input id="phone" placeholder="+254 XXX XXX XXX" />
-              </div>
-
-              <div className="space-y-2">
                 <label htmlFor="email" className="block text-sm font-medium text-slate-700">
                   Email address
                 </label>
