@@ -1,6 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
+import { paymentService } from '@/services/apiService';
 
 interface PaymentState {
   isProcessing: boolean;
@@ -30,19 +31,11 @@ export const usePaymentStore = create<PaymentStore>((set) => ({
         error: null,
       });
 
-      // TODO: Replace with actual M-Pesa API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const result = await paymentService.initiatePayment(amount, phoneNumber);
 
       set({
         paymentStatus: 'stk_sent',
-        transactionId: 'TXN-' + Date.now(),
-      });
-
-      // Simulate success after STK sent
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      set({
-        paymentStatus: 'success',
+        transactionId: result.transactionId,
         isProcessing: false,
       });
     } catch (error) {
@@ -58,10 +51,11 @@ export const usePaymentStore = create<PaymentStore>((set) => ({
   checkPaymentStatus: async (transactionId: string) => {
     try {
       set({ isProcessing: true });
-      // TODO: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      // Mock check
-      set({ isProcessing: false });
+      const result = await paymentService.checkStatus(transactionId);
+      set({ 
+        paymentStatus: result.status === 'success' ? 'success' : 'failed',
+        isProcessing: false 
+      });
     } catch (error) {
       set({
         error: error instanceof Error ? error.message : 'Failed to check payment status',

@@ -1,4 +1,4 @@
-import { api } from '@/lib/api';
+import API from '@/lib/api';
 import type { AuthResponse, LoginRequest, RegisterRequest } from '@/types/auth';
 import type { Application, CreateApplicationRequest } from '@/types/application';
 import type { Job } from '@/types/job';
@@ -10,49 +10,17 @@ import type { Profile, UpdateProfileRequest } from '@/types/profile';
  */
 export const authService = {
   login: async (data: LoginRequest): Promise<AuthResponse> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling AUTH LOGIN API:', data);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          user: {
-            id: '1',
-            name: 'John Doe',
-            email: data.email,
-            phone: '+254712345678',
-            profileCompletion: 75,
-            createdAt: new Date().toISOString(),
-            role: 'user',
-          },
-          token: 'mock-token-' + Date.now(),
-        });
-      }, 1000);
-    });
+    const res = await API.post('/auth/login', data);
+    return res.data;
   },
 
   register: async (data: RegisterRequest): Promise<AuthResponse> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling AUTH REGISTER API:', data);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          user: {
-            id: Math.random().toString(36).substr(2, 9),
-            name: data.name,
-            email: data.email,
-            phone: data.phone,
-            profileCompletion: 0,
-            createdAt: new Date().toISOString(),
-            role: 'user',
-          },
-          token: 'mock-token-' + Date.now(),
-        });
-      }, 1000);
-    });
+    const res = await API.post('/auth/register', data);
+    return res.data;
   },
 
   logout: async (): Promise<void> => {
-    // TODO: Replace with actual API endpoint
+    // TODO: Call backend logout endpoint if needed
     return Promise.resolve();
   },
 };
@@ -62,33 +30,27 @@ export const authService = {
  */
 export const jobServiceAPI = {
   getAll: async (filters?: Record<string, any>): Promise<Job[]> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling JOBS LIST API:', filters);
-    return Promise.resolve([]);
+    const res = await API.get('/jobs', { params: filters });
+    return res.data;
   },
 
   getById: async (id: string): Promise<Job | null> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling JOBS GET API:', id);
-    return Promise.resolve(null);
+    const res = await API.get(`/jobs/${id}`);
+    return res.data;
   },
 
   create: async (data: any): Promise<Job> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling JOBS CREATE API:', data);
-    return Promise.resolve({} as Job);
+    const res = await API.post('/jobs', data);
+    return res.data;
   },
 
   update: async (id: string, data: any): Promise<Job> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling JOBS UPDATE API:', id, data);
-    return Promise.resolve({} as Job);
+    const res = await API.put(`/jobs/${id}`, data);
+    return res.data;
   },
 
   delete: async (id: string): Promise<void> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling JOBS DELETE API:', id);
-    return Promise.resolve();
+    await API.delete(`/jobs/${id}`);
   },
 };
 
@@ -97,27 +59,23 @@ export const jobServiceAPI = {
  */
 export const applicationService = {
   getAll: async (): Promise<Application[]> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling APPLICATIONS LIST API');
-    return Promise.resolve([]);
+    const res = await API.get('/applications');
+    return res.data;
   },
 
   getById: async (id: string): Promise<Application | null> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling APPLICATIONS GET API:', id);
-    return Promise.resolve(null);
+    const res = await API.get(`/applications/${id}`);
+    return res.data;
   },
 
   create: async (data: CreateApplicationRequest): Promise<Application> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling APPLICATIONS CREATE API:', data);
-    return Promise.resolve({} as Application);
+    const res = await API.post('/applications', data);
+    return res.data;
   },
 
   updateStatus: async (id: string, status: string): Promise<Application> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling APPLICATIONS UPDATE STATUS API:', id, status);
-    return Promise.resolve({} as Application);
+    const res = await API.put(`/applications/${id}/status`, { status });
+    return res.data;
   },
 };
 
@@ -126,15 +84,13 @@ export const applicationService = {
  */
 export const profileService = {
   get: async (): Promise<Profile | null> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling PROFILE GET API');
-    return Promise.resolve(null);
+    const res = await API.get('/profile');
+    return res.data;
   },
 
   update: async (data: UpdateProfileRequest): Promise<Profile> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling PROFILE UPDATE API:', data);
-    return Promise.resolve({} as Profile);
+    const res = await API.put('/profile', data);
+    return res.data;
   },
 };
 
@@ -143,21 +99,16 @@ export const profileService = {
  */
 export const notificationService = {
   getAll: async (): Promise<Notification[]> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling NOTIFICATIONS LIST API');
-    return Promise.resolve([]);
+    const res = await API.get('/notifications');
+    return res.data;
   },
 
   markAsRead: async (id: string): Promise<void> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling NOTIFICATIONS MARK AS READ API:', id);
-    return Promise.resolve();
+    await API.put(`/notifications/${id}/read`);
   },
 
   delete: async (id: string): Promise<void> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling NOTIFICATIONS DELETE API:', id);
-    return Promise.resolve();
+    await API.delete(`/notifications/${id}`);
   },
 };
 
@@ -166,14 +117,12 @@ export const notificationService = {
  */
 export const paymentService = {
   initiatePayment: async (amount: number, phoneNumber: string): Promise<{ transactionId: string }> => {
-    // TODO: Replace with actual M-Pesa API call
-    console.log('Calling PAYMENT INITIATE API:', amount, phoneNumber);
-    return Promise.resolve({ transactionId: 'TXN-' + Date.now() });
+    const res = await API.post('/payments/initiate', { amount, phoneNumber });
+    return res.data;
   },
 
   checkStatus: async (transactionId: string): Promise<{ status: string }> => {
-    // TODO: Replace with actual API endpoint
-    console.log('Calling PAYMENT CHECK STATUS API:', transactionId);
-    return Promise.resolve({ status: 'success' });
+    const res = await API.get(`/payments/status/${transactionId}`);
+    return res.data;
   },
 };

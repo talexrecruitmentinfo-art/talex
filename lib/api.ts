@@ -1,35 +1,35 @@
 import axios from 'axios';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
-
-export const api = axios.create({
-  baseURL: BASE_URL,
+const API = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Add token to requests
-api.interceptors.request.use((config) => {
+// Add JWT token handling
+API.interceptors.request.use((req) => {
   if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('auth-token');
+    const token = localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      req.headers.Authorization = `Bearer ${token}`;
     }
   }
-  return config;
+  return req;
 });
 
 // Handle response errors
-api.interceptors.response.use(
+API.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('auth-token');
+        localStorage.removeItem('token');
         window.location.href = '/login';
       }
     }
     return Promise.reject(error);
   }
 );
+
+export default API;

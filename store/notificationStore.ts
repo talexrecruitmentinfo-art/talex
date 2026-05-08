@@ -2,6 +2,7 @@
 
 import { create } from 'zustand';
 import type { Notification } from '@/types/notification';
+import { notificationService } from '@/services/apiService';
 
 interface NotificationStore {
   notifications: Notification[];
@@ -34,44 +35,43 @@ export const useNotificationStore = create<NotificationStore>((set) => ({
     });
   },
 
-  markAsRead: (id: string) => {
-    set((state) => {
-      const notification = state.notifications.find((n) => n.id === id);
-      return {
-        notifications: state.notifications.map((n) =>
-          n.id === id ? { ...n, read: true } : n
-        ),
-        unreadCount: notification && !notification.read ? state.unreadCount - 1 : state.unreadCount,
-      };
-    });
+  markAsRead: async (id: string) => {
+    try {
+      await notificationService.markAsRead(id);
+      set((state) => {
+        const notification = state.notifications.find((n) => n.id === id);
+        return {
+          notifications: state.notifications.map((n) =>
+            n.id === id ? { ...n, read: true } : n
+          ),
+          unreadCount: notification && !notification.read ? state.unreadCount - 1 : state.unreadCount,
+        };
+      });
+    } catch (error) {
+      // Handle error silently or show toast
+    }
   },
 
-  dismissNotification: (id: string) => {
-    set((state) => ({
-      notifications: state.notifications.filter((n) => n.id !== id),
-    }));
+  dismissNotification: async (id: string) => {
+    try {
+      await notificationService.delete(id);
+      set((state) => ({
+        notifications: state.notifications.filter((n) => n.id !== id),
+        unreadCount: state.notifications.find(n => n.id === id && !n.read) 
+          ? state.unreadCount - 1 
+          : state.unreadCount,
+      }));
+    } catch (error) {
+      // Handle error silently or show toast
+    }
   },
 
   fetchNotifications: async () => {
     try {
       set({ isLoading: true });
-      // TODO: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Mock notifications
-      const mockNotifications: Notification[] = [
-        {
-          id: '1',
-          userId: '1',
-          type: 'payment',
-          title: 'Payment Successful',
-          message: 'KES 500 application fee processed.',
-          read: false,
-          createdAt: new Date().toISOString(),
-        },
-      ];
-
-      set({ notifications: mockNotifications, isLoading: false });
+      const notifications = await notificationService.getAll();
+      const unreadCount = notifications.filter(n => !n.read).length;
+      set({ notifications, unreadCount, isLoading: false });
     } catch (error) {
       set({ isLoading: false });
     }

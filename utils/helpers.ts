@@ -1,16 +1,16 @@
 export function getStoredToken(): string | null {
   if (typeof window === 'undefined') return null;
-  return localStorage.getItem('auth-token');
+  return localStorage.getItem('token');
 }
 
 export function setStoredToken(token: string): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem('auth-token', token);
+  localStorage.setItem('token', token);
 }
 
 export function clearStoredToken(): void {
   if (typeof window === 'undefined') return;
-  localStorage.removeItem('auth-token');
+  localStorage.removeItem('token');
 }
 
 export function isTokenExpired(token: string): boolean {

@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import type { Job } from '@/types/job';
-import { jobs } from '@/constants/jobs';
+import { jobServiceAPI } from '@/services/apiService';
 
 interface JobStore {
   jobs: Job[];
@@ -24,8 +24,7 @@ export const useJobStore = create<JobStore>((set) => ({
   fetchJobs: async () => {
     try {
       set({ isLoading: true, error: null });
-      // TODO: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const jobs = await jobServiceAPI.getAll();
       set({ jobs, isLoading: false });
     } catch (error) {
       set({
@@ -38,10 +37,8 @@ export const useJobStore = create<JobStore>((set) => ({
   fetchJobById: async (id: string) => {
     try {
       set({ isLoading: true, error: null });
-      // TODO: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      const job = jobs.find((j) => j.id === id);
-      set({ selectedJob: job || null, isLoading: false });
+      const job = await jobServiceAPI.getById(id);
+      set({ selectedJob: job, isLoading: false });
     } catch (error) {
       set({
         error: error instanceof Error ? error.message : 'Failed to fetch job',

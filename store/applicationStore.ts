@@ -2,6 +2,7 @@
 
 import { create } from 'zustand';
 import type { Application, CreateApplicationRequest, ApplicationStatus } from '@/types/application';
+import { applicationService } from '@/services/apiService';
 
 interface ApplicationStore {
   applications: Application[];
@@ -21,34 +22,8 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
   fetchApplications: async () => {
     try {
       set({ isLoading: true, error: null });
-      // TODO: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Mock data
-      const mockApplications: Application[] = [
-        {
-          id: '1',
-          userId: '1',
-          jobId: '1',
-          status: 'submitted',
-          paymentStatus: 'completed',
-          appliedAt: new Date().toISOString(),
-          jobTitle: 'Hospitality Supervisor',
-          company: 'True North Staffing',
-        },
-        {
-          id: '2',
-          userId: '1',
-          jobId: '2',
-          status: 'reviewed',
-          paymentStatus: 'pending',
-          appliedAt: new Date().toISOString(),
-          jobTitle: 'IT Support Specialist',
-          company: 'Maple Cloud Services',
-        },
-      ];
-
-      set({ applications: mockApplications, isLoading: false });
+      const applications = await applicationService.getAll();
+      set({ applications, isLoading: false });
     } catch (error) {
       set({
         error: error instanceof Error ? error.message : 'Failed to fetch applications',
@@ -60,20 +35,7 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
   createApplication: async (data: CreateApplicationRequest) => {
     try {
       set({ isLoading: true, error: null });
-      // TODO: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      const newApplication: Application = {
-        id: Math.random().toString(36).substr(2, 9),
-        userId: '1',
-        jobId: data.jobId,
-        status: 'submitted',
-        paymentStatus: data.paymentStatus as any,
-        appliedAt: new Date().toISOString(),
-        jobTitle: 'New Job',
-        company: 'Company',
-      };
-
+      const newApplication = await applicationService.create(data);
       set((state) => ({
         applications: [...state.applications, newApplication],
         isLoading: false,
@@ -90,12 +52,10 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
   updateApplicationStatus: async (id: string, status: ApplicationStatus) => {
     try {
       set({ isLoading: true, error: null });
-      // TODO: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
+      const updatedApplication = await applicationService.updateStatus(id, status);
       set((state) => ({
         applications: state.applications.map((app) =>
-          app.id === id ? { ...app, status } : app
+          app.id === id ? updatedApplication : app
         ),
         isLoading: false,
       }));
