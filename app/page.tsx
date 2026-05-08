@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import FeaturedJobs from '@/components/features/featured-jobs';
 import HeroSection from '@/components/features/hero-section';
 
@@ -38,12 +39,12 @@ export default function HomePage() {
             <h2 className="mt-4 text-3xl font-semibold">Create your account and start your Canada job application today.</h2>
           </div>
           <div className="flex flex-wrap gap-4">
-            <a href="/register" className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-brand-600 hover:bg-slate-100">
+            <Link href="/register" className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-brand-600 hover:bg-slate-100">
               Register now
-            </a>
-            <a href="/jobs" className="inline-flex items-center justify-center rounded-full border border-white px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">
+            </Link>
+            <Link href="/jobs" className="inline-flex items-center justify-center rounded-full border border-white px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">
               Browse jobs
-            </a>
+            </Link>
           </div>
         </div>
       </section>

@@ -36,8 +36,8 @@ export default function RegisterPage() {
       await registerUser(data);
       toast.success('Account created successfully!');
       router.push('/dashboard/profile');
-    } catch (err: any) {
-      console.log(err.response?.data);
+    } catch (err: unknown) {
+      console.log((err as any).response?.data);
       toast.error(error || 'Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);

@@ -62,7 +62,7 @@ export default function TermsPage() {
         <section>
           <h2 className="text-lg font-semibold text-slate-900">7. Limitation of Liability</h2>
           <p>
-            Talex is provided "as-is" without warranties. We are not liable for job rejections, visa denials, payment disputes, or employment-related issues. Our liability is limited to the application fee paid.
+            Talex is provided &quot;as-is&quot; without warranties. We are not liable for job rejections, visa denials, payment disputes, or employment-related issues. Our liability is limited to the application fee paid.
           </p>
         </section>
 

@@ -55,8 +55,8 @@ export default function ResumeUploadPage() {
       setUploadSuccess(data.fileUrl || 'Resume uploaded successfully.');
       toast.success('Resume uploaded successfully!');
       setResumeFile(null);
-    } catch (error: any) {
-      setUploadError(error?.message || 'Resume upload failed.');
+    } catch (error: unknown) {
+      setUploadError((error as any)?.message || 'Resume upload failed.');
       toast.error('Resume upload failed.');
     } finally {
       setUploading(false);

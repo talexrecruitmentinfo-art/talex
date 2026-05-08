@@ -11,7 +11,7 @@ export default function PrivacyPolicyPage() {
         <section>
           <h2 className="text-lg font-semibold text-slate-900">1. Introduction</h2>
           <p>
-            Talex ("we," "us," "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform.
+            Talex (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform.
           </p>
         </section>
 

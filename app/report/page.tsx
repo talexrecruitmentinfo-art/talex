@@ -4,6 +4,11 @@ import { FormEvent, useState } from 'react';
 import { toast } from 'sonner';
 import { reportService } from '@/services/apiService';
 
+interface ReportQuestion {
+  id: string;
+  label: string;
+}
+
 export default function ReportPage() {
   const [selectedIssue, setSelectedIssue] = useState('');
   const [details, setDetails] = useState('');
@@ -13,13 +18,13 @@ export default function ReportPage() {
   const [formError, setFormError] = useState<string | null>(null);
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
 
-  const questions = [
-    "Technical issue with the website",
-    "Problem with job applications",
-    "Payment or billing issue",
-    "Account login or registration problem",
-    "Profile update issue",
-    "Other"
+  const questions: ReportQuestion[] = [
+    { id: '1', label: 'Technical issue with the website' },
+    { id: '2', label: 'Problem with job applications' },
+    { id: '3', label: 'Payment or billing issue' },
+    { id: '4', label: 'Account login or registration problem' },
+    { id: '5', label: 'Profile update issue' },
+    { id: '6', label: 'Other' },
   ];
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -79,18 +84,18 @@ export default function ReportPage() {
             What issue are you facing?
           </label>
           <div className="space-y-2">
-            {questions.map((question, index) => (
-              <label key={index} className="flex items-center space-x-2">
+            {questions.map((question) => (
+              <label key={question.id} className="flex items-center space-x-2">
                 <input
                   type="radio"
                   name="issue"
-                  value={question}
-                  checked={selectedIssue === question}
+                  value={question.label}
+                  checked={selectedIssue === question.label}
                   onChange={(e) => setSelectedIssue(e.target.value)}
                   className="text-brand-500 focus:ring-brand-500"
                   disabled={isSubmitting}
                 />
-                <span className="text-sm text-slate-700">{question}</span>
+                <span className="text-sm text-slate-700">{question.label}</span>
               </label>
             ))}
           </div>

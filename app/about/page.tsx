@@ -93,7 +93,7 @@ export default function AboutPage() {
             <span className="font-semibold text-slate-900">Security & Privacy:</span> Your personal data and documents are encrypted and protected. We never share information without your explicit consent.
           </p>
           <p className="text-base leading-8">
-            <span className="font-semibold text-slate-900">Equal Opportunity:</span> We believe talent knows no borders. We're committed to fair treatment for every applicant.
+            <span className="font-semibold text-slate-900">Equal Opportunity:</span> We believe talent knows no borders. We&apos;re committed to fair treatment for every applicant.
           </p>
           <p className="text-base leading-8">
             <span className="font-semibold text-slate-900">Continuous Improvement:</span> We listen to our users and constantly enhance our platform based on your feedback.

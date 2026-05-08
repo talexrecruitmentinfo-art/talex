@@ -36,8 +36,8 @@ export default function ContactPage() {
       setCategory('Support');
       setSubject('');
       setMessage('');
-    } catch (error: any) {
-      const message = error?.response?.data?.message || error?.message || 'Unable to send your request right now.';
+    } catch (error: unknown) {
+      const message = (error as any)?.response?.data?.message || (error as any)?.message || 'Unable to send your request right now.';
       setFormError(message);
       toast.error(message);
     } finally {

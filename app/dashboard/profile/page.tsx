@@ -19,13 +19,13 @@ export default function ProfilePage() {
     resolver: zodResolver(profileSchema),
   });
 
-  const onSubmit = async (data: ProfileInput) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true);
       // TODO: Call API to update profile
       await new Promise((resolve) => setTimeout(resolve, 1000));
       toast.success('Profile updated successfully!');
-    } catch (err) {
+    } catch {
       toast.error('Failed to update profile');
     } finally {
       setIsSubmitting(false);

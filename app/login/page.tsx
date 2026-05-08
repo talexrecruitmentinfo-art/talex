@@ -30,7 +30,7 @@ export default function LoginPage() {
       await login(data);
       toast.success('Login successful!');
       router.push('/dashboard');
-    } catch (err) {
+    } catch {
       toast.error(error || 'Login failed. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -107,7 +107,7 @@ export default function LoginPage() {
               </Button>
 
               <p className="text-center text-sm text-slate-700">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <Link href="/register" className="font-semibold text-brand-600 hover:text-brand-700">
                   Register
                 </Link>
@@ -122,7 +122,7 @@ export default function LoginPage() {
           </div>
 
           <div className="text-center text-sm text-slate-600">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/register" className="font-semibold text-brand-500 hover:text-brand-600">
               Create one
             </Link>
