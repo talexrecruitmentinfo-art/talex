@@ -25,12 +25,19 @@ export default function RegisterPage() {
   });
 
   const onSubmit = async (data: RegisterInput) => {
+    // Check password confirmation before sending
+    if (data.password !== data.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
     try {
       setIsSubmitting(true);
       await registerUser(data);
       toast.success('Account created successfully!');
       router.push('/dashboard/profile');
-    } catch (err) {
+    } catch (err: any) {
+      console.log(err.response?.data);
       toast.error(error || 'Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
