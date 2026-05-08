@@ -31,7 +31,7 @@ export const usePaymentStore = create<PaymentStore>((set) => ({
         error: null,
       });
 
-      const result = await paymentService.initiatePayment(amount, phoneNumber);
+      const result = await paymentService.initiatePayment(phoneNumber, amount);
 
       set({
         paymentStatus: 'stk_sent',
@@ -51,10 +51,10 @@ export const usePaymentStore = create<PaymentStore>((set) => ({
   checkPaymentStatus: async (transactionId: string) => {
     try {
       set({ isProcessing: true });
-      const result = await paymentService.checkStatus(transactionId);
-      set({ 
+      const result = await paymentService.verify(transactionId);
+      set({
         paymentStatus: result.status === 'success' ? 'success' : 'failed',
-        isProcessing: false 
+        isProcessing: false,
       });
     } catch (error) {
       set({

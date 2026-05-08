@@ -8,7 +8,7 @@ import { authService } from '@/services/apiService';
 interface AuthStore extends AuthState {
   login: (credentials: LoginRequest) => Promise<void>;
   register: (data: RegisterRequest) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   clearError: () => void;
   setLoading: (loading: boolean) => void;
 }
@@ -25,60 +25,70 @@ export const useAuthStore = create<AuthStore>()(
         try {
           set({ isLoading: true, error: null });
 
-      const response = await authService.login(credentials);
-      const { user, token } = response;
+          const response = await authService.login(credentials);
+          const { user, token } = response;
 
-      set({
-        user,
-        token,
-        isLoading: false,
-      });
+          set({
+            user,
+            token,
+            isLoading: false,
+          });
 
-      // Store token in localStorage
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('token', token);
-      }
-    } catch (error) {
-      set({
-        error: error instanceof Error ? error.message : 'Login failed',
-        isLoading: false,
-      });
-      throw error;
-    }
-  },
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('token', token);
+          }
+        } catch (error) {
+          set({
+            error: error instanceof Error ? error.message : 'Login failed',
+            isLoading: false,
+          });
+          throw error;
+        }
+      },
 
-  register: async (data: RegisterRequest) => {
-    try {
-      set({ isLoading: true, error: null });
+      register: async (data: RegisterRequest) => {
+        try {
+          set({ isLoading: true, error: null });
 
-      const response = await authService.register(data);
-      const { user, token } = response;
+          const response = await authService.register(data);
+          const { user, token } = response;
 
-      set({
-        user,
-        token,
-        isLoading: false,
-      });
+          set({
+            user,
+            token,
+            isLoading: false,
+          });
 
-      // Store token in localStorage
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('token', token);
-      }
-    } catch (error) {
-      set({
-        error: error instanceof Error ? error.message : 'Login failed',
-        isLoading: false,
-      });
-      throw error;
-    }
-  },
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('token', token);
+          }
+        } catch (error) {
+          set({
+            error: error instanceof Error ? error.message : 'Login failed',
+            isLoading: false,
+          });
+          throw error;
+        }
+      },
 
-      logout: () => {
-        set({
-          user: null,
-          token: null,
-          error: null,
-        });
+      logout: async () => {
+        try {
+          set({ isLoading: true, error: null });
+          await authService.logout();
+        } catch {
+          // Ignore failures during logout action
+        } finally {
+          set({
+            user: null,
+            token: null,
+            error: null,
+            isLoading: false,
+          });
+
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('token');
+          }
+        }
       },
 
       clearError: () => {

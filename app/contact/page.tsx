@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
+import Link from 'next/link';
 import { toast } from 'sonner';
 
 export default function ContactPage() {
@@ -144,6 +145,21 @@ export default function ContactPage() {
             {isSubmitting ? 'Sending...' : 'Send Message'}
           </button>
         </form>
+
+        <div className="mt-8 rounded-[32px] border border-slate-200 bg-slate-50 p-6 shadow-card">
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold text-slate-900">Upload your resume</h2>
+            <p className="mt-2 text-sm text-slate-600">
+              Upload your resume separately on the dedicated resume upload page.
+            </p>
+          </div>
+          <Link
+            href="/resume-upload"
+            className="inline-flex w-full items-center justify-center rounded-full bg-brand-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-600"
+          >
+            Go to resume upload
+          </Link>
+        </div>
       </div>
     </div>
   );

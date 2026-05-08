@@ -54,11 +54,11 @@ export const useNotificationStore = create<NotificationStore>((set) => ({
 
   dismissNotification: async (id: string) => {
     try {
-      await notificationService.delete(id);
+      await notificationService.markAsRead(id);
       set((state) => ({
         notifications: state.notifications.filter((n) => n.id !== id),
-        unreadCount: state.notifications.find(n => n.id === id && !n.read) 
-          ? state.unreadCount - 1 
+        unreadCount: state.notifications.find((n) => n.id === id && !n.read)
+          ? state.unreadCount - 1
           : state.unreadCount,
       }));
     } catch (error) {
@@ -70,7 +70,7 @@ export const useNotificationStore = create<NotificationStore>((set) => ({
     try {
       set({ isLoading: true });
       const notifications = await notificationService.getAll();
-      const unreadCount = notifications.filter(n => !n.read).length;
+      const unreadCount = notifications.filter((n) => !n.read).length;
       set({ notifications, unreadCount, isLoading: false });
     } catch (error) {
       set({ isLoading: false });
