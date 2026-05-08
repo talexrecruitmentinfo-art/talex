@@ -23,11 +23,10 @@ export default function ContactPage() {
 
     try {
       await supportService.create({
-        name,
-        email,
-        category,
         subject,
+        category,
         message,
+        priority: 'normal',
       });
 
       toast.success('Support request submitted successfully!');

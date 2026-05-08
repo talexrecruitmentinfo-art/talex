@@ -31,7 +31,7 @@ export const usePaymentStore = create<PaymentStore>((set) => ({
         error: null,
       });
 
-      const result = await paymentService.initiatePayment(phoneNumber, amount);
+      const result = await paymentService.stkpush(phoneNumber, amount);
 
       set({
         paymentStatus: 'stk_sent',

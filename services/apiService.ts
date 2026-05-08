@@ -19,8 +19,8 @@ export const authService = {
     return res.data;
   },
 
-  logout: async (): Promise<void> => {
-    await API.post('/auth/logout');
+  verify: async (token: string): Promise<void> => {
+    await API.get(`/auth/verify/${token}`);
   },
 
   refresh: async (): Promise<AuthResponse> => {
@@ -28,12 +28,16 @@ export const authService = {
     return res.data;
   },
 
-  verify: async (token: string): Promise<void> => {
-    await API.get(`/auth/verify/${token}`);
+  logout: async (): Promise<void> => {
+    await API.post('/auth/logout');
   },
 
-  resetPassword: async (email: string, newPassword: string): Promise<void> => {
-    await API.post('/auth/reset-password', { email, newPassword });
+  forgotPassword: async (email: string): Promise<void> => {
+    await API.post('/auth/forgot-password', { email });
+  },
+
+  resetPassword: async (data: { token: string; newPassword: string }): Promise<void> => {
+    await API.post('/auth/reset-password', data);
   },
 };
 
@@ -57,7 +61,7 @@ export const jobServiceAPI = {
   },
 
   create: async (data: any): Promise<Job> => {
-    const res = await API.post('/admin/jobs/create', data);
+    const res = await API.post('/jobs', data);
     return res.data;
   },
 
@@ -104,11 +108,10 @@ export const applicationService = {
  */
 export const supportService = {
   create: async (data: {
-    category: string;
     subject: string;
+    category: string;
     message: string;
-    name: string;
-    email: string;
+    priority?: string;
   }): Promise<any> => {
     const res = await API.post('/support', data);
     return res.data;
@@ -116,6 +119,11 @@ export const supportService = {
 
   getAll: async (): Promise<any[]> => {
     const res = await API.get('/support');
+    return res.data;
+  },
+
+  reply: async (requestId: string, reply: string): Promise<any> => {
+    const res = await API.patch('/admin/support-requests/reply', { requestId, reply });
     return res.data;
   },
 };
@@ -153,9 +161,13 @@ export const notificationService = {
  * Payment Service
  */
 export const paymentService = {
-  initiatePayment: async (phoneNumber: string, amount: number): Promise<{ transactionId: string }> => {
+  stkpush: async (phoneNumber: string, amount: number): Promise<{ transactionId: string }> => {
     const res = await API.post('/payments/stkpush', { phone: phoneNumber, amount });
     return res.data;
+  },
+
+  callback: async (data: any): Promise<void> => {
+    await API.post('/payments/callback', data);
   },
 
   verify: async (transactionId: string): Promise<{ status: string }> => {
@@ -171,7 +183,7 @@ export const uploadService = {
   uploadResume: async (file: File): Promise<any> => {
     const formData = new FormData();
     formData.append('resume', file);
-    const res = await API.post('/upload', formData, {
+    const res = await API.post('/upload/upload-resume', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -184,15 +196,6 @@ export const uploadService = {
  * Admin Service
  */
 export const adminService = {
-  updateJob: async (id: string, data: any): Promise<Job> => {
-    const res = await API.put(`/admin/jobs/update/${id}`, data);
-    return res.data;
-  },
-
-  deleteJob: async (id: string): Promise<void> => {
-    await API.delete(`/admin/jobs/delete/${id}`);
-  },
-
   getApplications: async (): Promise<Application[]> => {
     const res = await API.get('/admin/applications');
     return res.data;
@@ -233,8 +236,12 @@ export const adminService = {
  * Report Service
  */
 export const reportService = {
-  generate: async (payload: { type: string; startDate?: string; endDate?: string }): Promise<any> => {
-    const res = await API.post('/report', payload);
+  generate: async (data: {
+    type: string;
+    startDate?: string;
+    endDate?: string;
+  }): Promise<any> => {
+    const res = await API.post('/report', data);
     return res.data;
   },
 };
