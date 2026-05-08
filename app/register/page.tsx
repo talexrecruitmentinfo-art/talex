@@ -36,7 +36,7 @@ export default function RegisterPage() {
                 <label htmlFor="phone" className="block text-sm font-medium text-slate-700">
                   Phone number
                 </label>
-                <Input id="phone" placeholder="+1 (XXX) XXX-XXXX" />
+                <Input id="phone" placeholder="+254 XXX XXX XXX" />
               </div>
 
               <div className="space-y-2">
