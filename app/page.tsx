@@ -1,6 +1,5 @@
 import FeaturedJobs from '@/components/features/featured-jobs';
 import HeroSection from '@/components/features/hero-section';
-import HowItWorks from '@/components/features/how-it-works';
 
 export default function HomePage() {
   return (
@@ -31,7 +30,6 @@ export default function HomePage() {
       </section>
 
       <FeaturedJobs />
-      <HowItWorks />
 
       <section className="rounded-[32px] border border-slate-200 bg-brand-500 px-8 py-10 text-white shadow-card sm:px-12">
         <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
