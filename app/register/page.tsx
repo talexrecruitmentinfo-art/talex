@@ -1,8 +1,42 @@
+'use client';
+
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { registerSchema, type RegisterInput } from '@/lib/validation';
+import { useAuthStore } from '@/store/authStore';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const { register: registerUser, isLoading, error } = useAuthStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = async (data: RegisterInput) => {
+    try {
+      setIsSubmitting(true);
+      await registerUser(data);
+      toast.success('Account created successfully!');
+      router.push('/dashboard/profile');
+    } catch (err) {
+      toast.error(error || 'Registration failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-md">
@@ -24,19 +58,52 @@ export default function RegisterPage() {
           </div>
 
           <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-card">
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               <div className="space-y-2">
                 <label htmlFor="name" className="block text-sm font-medium text-slate-700">
                   Full name
                 </label>
-                <Input id="name" placeholder="John Doe" />
+                <Input 
+                  id="name" 
+                  placeholder="John Doe"
+                  {...register('name')}
+                  disabled={isSubmitting || isLoading}
+                />
+                {errors.name && (
+                  <p className="text-xs text-red-500">{errors.name.message}</p>
+                )}
               </div>
 
               <div className="space-y-2">
                 <label htmlFor="email" className="block text-sm font-medium text-slate-700">
                   Email address
                 </label>
-                <Input id="email" type="email" placeholder="name@example.com" />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="name@example.com"
+                  {...register('email')}
+                  disabled={isSubmitting || isLoading}
+                />
+                {errors.email && (
+                  <p className="text-xs text-red-500">{errors.email.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="phone" className="block text-sm font-medium text-slate-700">
+                  Phone number
+                </label>
+                <Input 
+                  id="phone" 
+                  type="text" 
+                  placeholder="+254 712 345 678"
+                  {...register('phone')}
+                  disabled={isSubmitting || isLoading}
+                />
+                {errors.phone && (
+                  <p className="text-xs text-red-500">{errors.phone.message}</p>  
+                )}
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -44,81 +111,64 @@ export default function RegisterPage() {
                   <label htmlFor="password" className="block text-sm font-medium text-slate-700">
                     Password
                   </label>
-                  <Input id="password" type="password" placeholder="Create password" />
+                  <Input 
+                    id="password" 
+                    type="password" 
+                    placeholder="Create password"
+                    {...register('password')}
+                    disabled={isSubmitting || isLoading}
+                  />
+                  {errors.password && (
+                    <p className="text-xs text-red-500">{errors.password.message}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="confirm" className="block text-sm font-medium text-slate-700">
+                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700">
                     Confirm password
                   </label>
-                  <Input id="confirm" type="password" placeholder="Confirm password" />
+                  <Input 
+                    id="confirmPassword" 
+                    type="password" 
+                    placeholder="Confirm password"
+                    {...register('confirmPassword')}
+                    disabled={isSubmitting || isLoading}
+                  />
+                  {errors.confirmPassword && (
+                    <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
+                  )}
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  className="mt-1 rounded border border-slate-300"
-                />
-                <label htmlFor="terms" className="text-sm text-slate-600">
-                  I agree to the{' '}
-                  <Link href="/terms" className="font-medium text-brand-500 hover:text-brand-600">
-                    terms of service
-                  </Link>{' '}
-                  and{' '}
-                  <Link href="/privacy-policy" className="font-medium text-brand-500 hover:text-brand-600">
-                    privacy policy
-                  </Link>
-                </label>
-              </div>
+              {error && (
+                <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+                  {error}
+                </div>
+              )}
 
-              <Button className="w-full">Create account</Button>
+              <Button className="w-full" disabled={isSubmitting || isLoading}>
+                {isSubmitting || isLoading ? 'Creating account...' : 'Create account'}
+              </Button>
+
+              <p className="text-center text-sm text-slate-700">
+                Already have an account?{' '}
+                <Link href="/login" className="font-semibold text-brand-600 hover:text-brand-700">
+                  Sign in
+                </Link>
+              </p>
             </form>
 
-            <div className="mt-6 space-y-4">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-slate-200" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="bg-white px-2 text-slate-500">or sign up with</span>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <svg className="h-5 w-5" viewBox="0 0 24 24">
-                    <path
-                      fill="currentColor"
-                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                    />
-                    <path
-                      fill="currentColor"
-                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                    />
-                    <path
-                      fill="currentColor"
-                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                    />
-                    <path
-                      fill="currentColor"
-                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                    />
-                  </svg>
-                  Google
-                </div>
-              </button>
+            <div className="mt-6 rounded-3xl bg-slate-50 p-4">
+              <p className="text-xs text-slate-600">
+                By registering, you agree to our{' '}
+                <Link href="/terms" className="font-medium text-brand-600 hover:text-brand-700">
+                  terms of service
+                </Link>{' '}
+                and{' '}
+                <Link href="/privacy-policy" className="font-medium text-brand-600 hover:text-brand-700">
+                  privacy policy
+                </Link>
+              </p>
             </div>
-          </div>
-
-          <div className="text-center text-sm text-slate-600">
-            Already have an account?{' '}
-            <Link href="/login" className="font-semibold text-brand-500 hover:text-brand-600">
-              Sign in existing account
-            </Link>
           </div>
         </div>
       </div>

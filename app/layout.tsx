@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import PublicLayout from '@/components/shared/layouts/public-layout';
+import { ToastProvider } from '@/components/shared/toast-provider';
 
 export const metadata: Metadata = {
   title: 'Talex | Canada Jobs for Kenyan Applicants',
@@ -12,6 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <PublicLayout>{children}</PublicLayout>
+        <ToastProvider />
       </body>
     </html>
   );
