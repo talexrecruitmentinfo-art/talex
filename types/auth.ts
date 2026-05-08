@@ -23,7 +23,7 @@ export type LoginRequest = {
 export type RegisterRequest = {
   name: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
   password: string;
 };
 
