@@ -25,9 +25,16 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginInput) => {
+    const payload = {
+      email: data.email.toLowerCase().trim(),
+      password: data.password.trim(),
+    };
+
+    console.log('LOGIN PAYLOAD:', payload);
+
     try {
       setIsSubmitting(true);
-      await login(data);
+      await login(payload);
       toast.success('Login successful!');
       router.push('/dashboard');
     } catch {

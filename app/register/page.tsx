@@ -32,9 +32,18 @@ export default function RegisterPage() {
       return;
     }
 
+    const payload = {
+      name: data.name.trim(),
+      email: data.email.toLowerCase().trim(),
+      phoneNumber: data.phone.trim(),
+      password: data.password.trim(),
+    };
+
+    console.log('REGISTER PAYLOAD:', payload);
+
     try {
       setIsSubmitting(true);
-      await registerUser(data);
+      await registerUser(payload);
       toast.success('Account created successfully!');
       router.push('/dashboard/profile');
     } catch (err: unknown) {
