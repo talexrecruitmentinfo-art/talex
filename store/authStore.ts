@@ -27,24 +27,24 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: true, error: null });
 
           const response = await authService.login(credentials);
-          console.log('Full Login response:', response); // Debug: see entire response
-          console.log('Response keys:', Object.keys(response)); // Debug: see response structure
           
-          // Handle different response formats
-          let user: any = response.user;
-          let token = response.token;
-          
-          // If response itself is the user (nested differently)
+          // Handle backend response structure: { success, message, data: { token, role, user } }
           const responseAny = response as any;
-          if (!user && responseAny.id) {
-            user = responseAny;
-          }
-          
-          console.log('Extracted user:', user); // Debug: see what we extracted
-          console.log('Extracted token:', token); // Debug: see token
+          let user = null;
+          let token = null;
 
-          if (!user) {
-            throw new Error('Server did not return user data. Response structure: ' + JSON.stringify(response));
+          if (responseAny.data) {
+            // New structure: response.data.user and response.data.token
+            user = responseAny.data.user;
+            token = responseAny.data.token;
+          } else if (responseAny.user) {
+            // Old structure: response.user and response.token
+            user = responseAny.user;
+            token = responseAny.token;
+          }
+
+          if (!user || !token) {
+            throw new Error('Server did not return required user data or token');
           }
 
           set({
@@ -60,7 +60,6 @@ export const useAuthStore = create<AuthStore>()(
           return user;
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Login failed';
-          console.error('Login error:', errorMessage, error); // Debug log
           set({
             error: errorMessage,
             isLoading: false,
@@ -74,7 +73,25 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: true, error: null });
 
           const response = await authService.register(data);
-          const { user, token } = response;
+          
+          // Handle backend response structure: { success, message, data: { token, role, user } }
+          const responseAny = response as any;
+          let user = null;
+          let token = null;
+
+          if (responseAny.data) {
+            // New structure: response.data.user and response.data.token
+            user = responseAny.data.user;
+            token = responseAny.data.token;
+          } else if (responseAny.user) {
+            // Old structure: response.user and response.token
+            user = responseAny.user;
+            token = responseAny.token;
+          }
+
+          if (!user || !token) {
+            throw new Error('Server did not return required user data or token');
+          }
 
           set({
             user,
@@ -87,7 +104,7 @@ export const useAuthStore = create<AuthStore>()(
           }
         } catch (error) {
           set({
-            error: error instanceof Error ? error.message : 'Login failed',
+            error: error instanceof Error ? error.message : 'Registration failed',
             isLoading: false,
           });
           throw error;
