@@ -8,7 +8,7 @@ interface NotificationStore {
   notifications: Notification[];
   unreadCount: number;
   isLoading: boolean;
-  addNotification: (notification: Omit<Notification, 'id' | 'createdAt'>) => void;
+  addNotification: (notification: Notification | Omit<Notification, 'id' | 'createdAt'>) => void;
   markAsRead: (id: string) => void;
   dismissNotification: (id: string) => void;
   fetchNotifications: () => Promise<void>;
@@ -24,8 +24,11 @@ export const useNotificationStore = create<NotificationStore>((set) => ({
     set((state) => {
       const newNotification: Notification = {
         ...notification,
-        id: Math.random().toString(36).substr(2, 9),
-        createdAt: new Date().toISOString(),
+        id: 'id' in notification && notification.id ? notification.id : Math.random().toString(36).substr(2, 9),
+        createdAt:
+          'createdAt' in notification && notification.createdAt
+            ? notification.createdAt
+            : new Date().toISOString(),
       };
 
       return {
