@@ -27,7 +27,13 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: true, error: null });
 
           const response = await authService.login(credentials);
+          console.log('Login response:', response); // Debug log
+          
           const { user, token } = response;
+
+          if (!user) {
+            throw new Error('Server did not return user data');
+          }
 
           set({
             user,
@@ -41,8 +47,10 @@ export const useAuthStore = create<AuthStore>()(
 
           return user;
         } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Login failed';
+          console.error('Login error:', errorMessage, error); // Debug log
           set({
-            error: error instanceof Error ? error.message : 'Login failed',
+            error: errorMessage,
             isLoading: false,
           });
           throw error;

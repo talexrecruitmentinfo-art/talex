@@ -38,6 +38,11 @@ export default function LoginPage() {
       clearError();
       
       const loggedInUser = await login(payload);
+      
+      if (!loggedInUser) {
+        throw new Error('Login failed. User data not received.');
+      }
+      
       toast.success('Login successful!');
       
       if (loggedInUser.role === 'ADMIN') {
