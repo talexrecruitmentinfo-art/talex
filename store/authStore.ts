@@ -6,7 +6,7 @@ import type { User, AuthState, LoginRequest, RegisterRequest } from '@/types/aut
 import { authService } from '@/services/apiService';
 
 interface AuthStore extends AuthState {
-  login: (credentials: LoginRequest) => Promise<void>;
+  login: (credentials: LoginRequest) => Promise<User>;
   register: (data: RegisterRequest) => Promise<void>;
   logout: () => Promise<void>;
   clearError: () => void;
@@ -22,7 +22,7 @@ export const useAuthStore = create<AuthStore>()(
       isLoading: false,
       error: null,
 
-      login: async (credentials: LoginRequest) => {
+      login: async (credentials: LoginRequest): Promise<User> => {
         try {
           set({ isLoading: true, error: null });
 
@@ -38,6 +38,8 @@ export const useAuthStore = create<AuthStore>()(
           if (typeof window !== 'undefined') {
             localStorage.setItem('token', token);
           }
+
+          return user;
         } catch (error) {
           set({
             error: error instanceof Error ? error.message : 'Login failed',

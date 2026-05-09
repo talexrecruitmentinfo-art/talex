@@ -28,6 +28,8 @@ export default function ContactPage() {
         category,
         message,
         priority: 'normal',
+        name,
+        email,
       });
 
       toast.success('Support request submitted successfully!');

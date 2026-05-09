@@ -53,6 +53,9 @@ export default function ReportPage() {
     try {
       await reportService.generate({
         type: selectedIssue,
+        name,
+        email,
+        details,
         startDate: new Date().toISOString(),
         endDate: new Date().toISOString(),
       });

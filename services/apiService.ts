@@ -125,6 +125,8 @@ export const supportService = {
     category: string;
     message: string;
     priority?: string;
+    name?: string;
+    email?: string;
   }): Promise<any> => {
     const res = await API.post('/support', data);
     return res.data;
@@ -152,6 +154,16 @@ export const profileService = {
 
   update: async (data: UpdateProfileRequest): Promise<Profile> => {
     const res = await API.put('/profile', data);
+    return res.data;
+  },
+};
+
+/**
+ * About Service
+ */
+export const aboutService = {
+  getInfo: async (): Promise<any> => {
+    const res = await API.get('/about');
     return res.data;
   },
 };
@@ -256,6 +268,9 @@ export const adminService = {
 export const reportService = {
   generate: async (data: {
     type: string;
+    details?: string;
+    name?: string;
+    email?: string;
     startDate?: string;
     endDate?: string;
   }): Promise<any> => {
