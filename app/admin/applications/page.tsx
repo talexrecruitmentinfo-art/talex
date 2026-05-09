@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import Button from '@/components/ui/button';
 import { useAuthStore } from '@/store/authStore';
 import { adminService } from '@/services/apiService';
 import type { Application, PipelineStage } from '@/types/application';
