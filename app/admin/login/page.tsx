@@ -12,8 +12,9 @@ import { toast } from 'sonner';
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const { login, isLoading, error } = useAuthStore();
+  const { login, isLoading, clearError } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
     register,
@@ -31,8 +32,12 @@ export default function AdminLoginPage() {
 
     try {
       setIsSubmitting(true);
+      setSubmitError(null);
+      clearError();
+      
       const loggedInUser = await login(payload);
       toast.success('Login successful!');
+      
       if (loggedInUser.role === 'ADMIN') {
         router.push('/admin/dashboard');
       } else if (loggedInUser.role === 'USER') {
@@ -40,8 +45,10 @@ export default function AdminLoginPage() {
       } else {
         router.push('/dashboard'); // fallback
       }
-    } catch {
-      toast.error(error || 'Login failed. Please try again.');
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Login failed. Please try again.';
+      setSubmitError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -78,9 +85,9 @@ export default function AdminLoginPage() {
             <p className="text-xs text-red-500">{errors.password.message}</p>
           )}
         </div>
-        {error && (
+        {submitError && (
           <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
-            {error}
+            {submitError}
           </div>
         )}
         <Button className="w-full" disabled={isSubmitting || isLoading}>

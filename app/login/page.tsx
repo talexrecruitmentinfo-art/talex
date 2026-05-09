@@ -13,9 +13,10 @@ import { toast } from 'sonner';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, isLoading, error } = useAuthStore();
+  const { login, isLoading, clearError } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
     register,
@@ -33,8 +34,12 @@ export default function LoginPage() {
 
     try {
       setIsSubmitting(true);
+      setSubmitError(null);
+      clearError();
+      
       const loggedInUser = await login(payload);
       toast.success('Login successful!');
+      
       if (loggedInUser.role === 'ADMIN') {
         router.push('/admin/dashboard');
       } else if (loggedInUser.role === 'USER') {
@@ -42,8 +47,10 @@ export default function LoginPage() {
       } else {
         router.push('/dashboard'); // fallback
       }
-    } catch {
-      toast.error(error || 'Login failed. Please try again.');
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Login failed. Please try again.';
+      setSubmitError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -113,9 +120,9 @@ export default function LoginPage() {
                 )}
               </div>
 
-              {error && (
+              {submitError && (
                 <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
-                  {error}
+                  {submitError}
                 </div>
               )}
 
