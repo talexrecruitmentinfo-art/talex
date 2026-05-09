@@ -30,8 +30,6 @@ export default function LoginPage() {
       password: data.password.trim(),
     };
 
-    console.log('LOGIN PAYLOAD:', payload);
-
     try {
       setIsSubmitting(true);
       await login(payload);
@@ -49,18 +47,14 @@ export default function LoginPage() {
       <div className="mx-auto max-w-md">
         <div className="space-y-8">
           <div className="space-y-3 text-center">
-            <div className="text-4xl font-bold">
-              <span className="text-red-500">T</span>
-              <span className="text-blue-500">a</span>
-              <span className="text-green-500">l</span>
-              <span className="text-purple-500">e</span>
-              <span className="text-orange-500">x</span>
-            </div>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-              Welcome back
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-600">
+              Talex
+            </p>
+            <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
+              Sign in to Talex
             </h1>
             <p className="text-sm text-slate-600">
-              Sign in to access your applications and job opportunities.
+              Access your dashboard, manage applications, and connect with Canadian recruiters.
             </p>
           </div>
 
@@ -123,17 +117,11 @@ export default function LoginPage() {
 
             <div className="mt-6 rounded-3xl bg-slate-50 p-4">
               <p className="text-xs text-slate-600">
-                <span className="font-semibold">Demo credentials:</span> Use any email/password for testing.
+                Your sign-in details are secure and used only to match you with verified opportunities.
               </p>
             </div>
           </div>
 
-          <div className="text-center text-sm text-slate-600">
-            Don&apos;t have an account?{' '}
-            <Link href="/register" className="font-semibold text-brand-500 hover:text-brand-600">
-              Create one
-            </Link>
-          </div>
         </div>
       </div>
     </div>
