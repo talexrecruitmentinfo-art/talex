@@ -27,12 +27,24 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: true, error: null });
 
           const response = await authService.login(credentials);
-          console.log('Login response:', response); // Debug log
+          console.log('Full Login response:', response); // Debug: see entire response
+          console.log('Response keys:', Object.keys(response)); // Debug: see response structure
           
-          const { user, token } = response;
+          // Handle different response formats
+          let user: any = response.user;
+          let token = response.token;
+          
+          // If response itself is the user (nested differently)
+          const responseAny = response as any;
+          if (!user && responseAny.id) {
+            user = responseAny;
+          }
+          
+          console.log('Extracted user:', user); // Debug: see what we extracted
+          console.log('Extracted token:', token); // Debug: see token
 
           if (!user) {
-            throw new Error('Server did not return user data');
+            throw new Error('Server did not return user data. Response structure: ' + JSON.stringify(response));
           }
 
           set({
