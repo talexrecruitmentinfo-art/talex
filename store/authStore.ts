@@ -11,6 +11,7 @@ interface AuthStore extends AuthState {
   logout: () => Promise<void>;
   clearError: () => void;
   setLoading: (loading: boolean) => void;
+  setState: (state: Partial<AuthState>) => void;
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -98,6 +99,8 @@ export const useAuthStore = create<AuthStore>()(
       setLoading: (loading: boolean) => {
         set({ isLoading: loading });
       },
+
+      setState: (state: Partial<AuthState>) => set(state),
     }),
     {
       name: 'auth-store',

@@ -2,13 +2,16 @@
 
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
+import ResumeButton from '@/components/ui/resume-button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { profileSchema, type ProfileInput } from '@/lib/validation';
+import { useAuthStore } from '@/store/authStore';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function ProfilePage() {
+  const { user } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -34,6 +37,19 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-8">
+      <section className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-card sm:p-10">
+        <div className="space-y-3 mb-6">
+          <p className="text-sm uppercase tracking-[0.25em] text-brand-600">Resume</p>
+          <h2 className="text-xl font-semibold text-slate-900">Your Resume</h2>
+        </div>
+        <div className="flex items-center justify-between bg-slate-50 rounded-lg p-4">
+          <div>
+            <p className="text-sm text-slate-600 mb-2">Download your uploaded resume</p>
+            <ResumeButton resumeUrl={user?.resume} />
+          </div>
+        </div>
+      </section>
+
       <section className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-card sm:p-10">
         <div className="space-y-3">
           <p className="text-sm uppercase tracking-[0.25em] text-brand-600">Profile</p>

@@ -81,3 +81,32 @@ export function getErrorMessage(error: unknown, fallback = 'An unexpected error 
 
   return fallback;
 }
+
+/**
+ * Download offer letter PDF for an application
+ */
+export function downloadOfferLetter(applicationId: string): void {
+  if (typeof window === 'undefined') return;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://backendtalex.onrender.com/api';
+  const url = `${apiUrl}/applications/${applicationId}/offer-letter`;
+  window.open(url, '_blank');
+}
+
+/**
+ * Pipeline stage labels and colors
+ */
+export const pipelineStages = {
+  applied: { label: 'Applied', color: 'text-slate-600 bg-slate-50', icon: '📝' },
+  review: { label: 'In Review', color: 'text-blue-600 bg-blue-50', icon: '👁️' },
+  interview: { label: 'Interview', color: 'text-purple-600 bg-purple-50', icon: '📞' },
+  offer: { label: 'Offer', color: 'text-orange-600 bg-orange-50', icon: '🎁' },
+  hired: { label: 'Hired', color: 'text-green-600 bg-green-50', icon: '✅' },
+  rejected: { label: 'Rejected', color: 'text-red-600 bg-red-50', icon: '❌' },
+};
+
+/**
+ * Get pipeline stage display info
+ */
+export function getPipelineStageInfo(stage?: string) {
+  return pipelineStages[stage as keyof typeof pipelineStages] || pipelineStages.applied;
+}

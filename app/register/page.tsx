@@ -10,12 +10,13 @@ import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { getErrorMessage } from '@/utils/helpers';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { register: registerUser, isLoading, error } = useAuthStore();
+  const { register: registerUser } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [resumeFileName, setResumeFileName] = useState<string>('');
 
   const {
     register,
@@ -26,31 +27,37 @@ export default function RegisterPage() {
   });
 
   const onSubmit = async (data: RegisterInput) => {
-    // Check password confirmation before sending
-    if (data.password !== data.confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
+    const formData = new FormData();
+    formData.append('fullName', data.name);
+    formData.append('email', data.email);
+    formData.append('password', data.password);
+    if (resumeFile) {
+      formData.append('resume', resumeFile);
     }
 
-    const payload = {
-      name: data.name.trim(),
-      email: data.email.toLowerCase().trim(),
-      phoneNumber: data.phone.trim(),
-      password: data.password.trim(),
-    };
-
-    console.log('REGISTER PAYLOAD:', payload);
+    console.log('REGISTER PAYLOAD:', { name: data.name, email: data.email, hasResume: !!resumeFile });
 
     try {
       setIsSubmitting(true);
-      await registerUser(payload);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await registerUser(formData as any);
+
       toast.success('Account created successfully!');
       router.push('/dashboard/profile');
     } catch (err: unknown) {
-      console.log(getErrorMessage(err));
-      toast.error(error || 'Registration failed. Please try again.');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      console.log((err as any)?.response?.data);
+      toast.error('Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setResumeFile(file);
+      setResumeFileName(file.name);
     }
   };
 
@@ -84,7 +91,7 @@ export default function RegisterPage() {
                   id="name" 
                   placeholder="John Doe"
                   {...register('name')}
-                  disabled={isSubmitting || isLoading}
+                  disabled={isSubmitting}
                 />
                 {errors.name && (
                   <p className="text-xs text-red-500">{errors.name.message}</p>
@@ -100,7 +107,7 @@ export default function RegisterPage() {
                   type="email" 
                   placeholder="name@example.com"
                   {...register('email')}
-                  disabled={isSubmitting || isLoading}
+                  disabled={isSubmitting}
                 />
                 {errors.email && (
                   <p className="text-xs text-red-500">{errors.email.message}</p>
@@ -108,62 +115,49 @@ export default function RegisterPage() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="phone" className="block text-sm font-medium text-slate-700">
-                  Phone number
+                <label htmlFor="password" className="block text-sm font-medium text-slate-700">
+                  Password
                 </label>
                 <Input 
-                  id="phone" 
-                  type="text" 
-                  placeholder="+254 712 345 678"
-                  {...register('phone')}
-                  disabled={isSubmitting || isLoading}
+                  id="password" 
+                  type="password" 
+                  placeholder="Create password"
+                  {...register('password')}
+                  disabled={isSubmitting}
                 />
-                {errors.phone && (
-                  <p className="text-xs text-red-500">{errors.phone.message}</p>  
+                {errors.password && (
+                  <p className="text-xs text-red-500">{errors.password.message}</p>
                 )}
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <label htmlFor="password" className="block text-sm font-medium text-slate-700">
-                    Password
-                  </label>
-                  <Input 
-                    id="password" 
-                    type="password" 
-                    placeholder="Create password"
-                    {...register('password')}
-                    disabled={isSubmitting || isLoading}
+              <div className="space-y-2">
+                <label htmlFor="resume" className="block text-sm font-medium text-slate-700">
+                  Resume (Optional)
+                </label>
+                <div className="relative">
+                  <input
+                    id="resume"
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    onChange={handleFileChange}
+                    disabled={isSubmitting}
+                    className="hidden"
                   />
-                  {errors.password && (
-                    <p className="text-xs text-red-500">{errors.password.message}</p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700">
-                    Confirm password
+                  <label
+                    htmlFor="resume"
+                    className="block w-full cursor-pointer rounded-lg border-2 border-dashed border-slate-300 px-4 py-8 text-center text-sm hover:border-slate-400 transition-colors"
+                  >
+                    {resumeFileName ? (
+                      <span className="text-slate-700 font-medium">{resumeFileName}</span>
+                    ) : (
+                      <span className="text-slate-500">Click to upload resume (PDF, DOC, DOCX)</span>
+                    )}
                   </label>
-                  <Input 
-                    id="confirmPassword" 
-                    type="password" 
-                    placeholder="Confirm password"
-                    {...register('confirmPassword')}
-                    disabled={isSubmitting || isLoading}
-                  />
-                  {errors.confirmPassword && (
-                    <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
-                  )}
                 </div>
               </div>
 
-              {error && (
-                <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
-                  {error}
-                </div>
-              )}
-
-              <Button className="w-full" disabled={isSubmitting || isLoading}>
-                {isSubmitting || isLoading ? 'Creating account...' : 'Create account'}
+              <Button className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating account...' : 'Create account'}
               </Button>
 
               <p className="text-center text-sm text-slate-700">

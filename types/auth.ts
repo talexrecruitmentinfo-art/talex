@@ -6,6 +6,7 @@ export type User = {
   profileCompletion: number;
   createdAt: string;
   role: 'user' | 'admin';
+  resume?: string | null;
 };
 
 export type AuthState = {
@@ -23,7 +24,6 @@ export type LoginRequest = {
 export type RegisterRequest = {
   name: string;
   email: string;
-  phoneNumber: string;
   password: string;
 };
 

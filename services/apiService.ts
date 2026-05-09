@@ -14,8 +14,11 @@ export const authService = {
     return res.data;
   },
 
-  register: async (data: RegisterRequest): Promise<AuthResponse> => {
-    const res = await API.post('/auth/register', data);
+  register: async (data: RegisterRequest | FormData): Promise<AuthResponse> => {
+    const config = data instanceof FormData ? {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    } : {};
+    const res = await API.post('/auth/register', data, config);
     return res.data;
   },
 
@@ -46,6 +49,11 @@ export const authService = {
  */
 export const jobServiceAPI = {
   getAll: async (filters?: Record<string, any>): Promise<Job[]> => {
+    const res = await API.get('/jobs', { params: filters });
+    return res.data;
+  },
+
+  getJobs: async (filters?: Record<string, any>): Promise<Job[]> => {
     const res = await API.get('/jobs', { params: filters });
     return res.data;
   },
@@ -91,6 +99,11 @@ export const applicationService = {
 
   create: async (data: CreateApplicationRequest): Promise<Application> => {
     const res = await API.post('/applications/create', data);
+    return res.data;
+  },
+
+  applyJob: async (jobId: string, data: CreateApplicationRequest): Promise<Application> => {
+    const res = await API.post(`/applications/${jobId}`, data);
     return res.data;
   },
 
@@ -203,6 +216,11 @@ export const adminService = {
 
   updateApplicationStatus: async (applicationId: string, status: ApplicationStatus): Promise<Application> => {
     const res = await API.patch('/admin/applications/update-status', { applicationId, status });
+    return res.data;
+  },
+
+  updateApplicationStage: async (applicationId: string, stage: string): Promise<Application> => {
+    const res = await API.put(`/admin/applications/${applicationId}/stage`, { stage });
     return res.data;
   },
 
