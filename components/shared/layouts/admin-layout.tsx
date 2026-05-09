@@ -18,7 +18,7 @@ export default function AdminLayout({ children }: PropsWithChildren<unknown>) {
   const { user, logout } = useAuth();
 
   return (
-    <ProtectedRoute requiredRole="admin">
+    <ProtectedRoute requiredRole="ADMIN">
       <div className="min-h-screen bg-slate-100 text-slate-900">
         <div className="border-b border-slate-300 bg-white px-4 py-4 shadow-sm sm:px-6">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">

@@ -16,7 +16,7 @@ export default function AdminApplicationsPage() {
 
   useEffect(() => {
     // Check if user is admin
-    if (user && user.role !== 'admin') {
+    if (user && user.role !== 'ADMIN') {
       setError('Access denied. Admin only.');
       setIsLoading(false);
       return;
@@ -119,7 +119,7 @@ export default function AdminApplicationsPage() {
     );
   }
 
-  if (user.role !== 'admin') {
+  if (user.role !== 'ADMIN') {
     return (
       <div className="rounded-[32px] border border-slate-200 bg-white p-8 text-center">
         <p className="text-red-600 font-semibold">Access Denied</p>

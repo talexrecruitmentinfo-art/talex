@@ -5,7 +5,7 @@ export type User = {
   phone: string;
   profileCompletion: number;
   createdAt: string;
-  role: 'user' | 'admin';
+  role: 'USER' | 'ADMIN';
   resume?: string | null;
 };
 

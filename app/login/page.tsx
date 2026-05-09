@@ -35,10 +35,12 @@ export default function LoginPage() {
       setIsSubmitting(true);
       const loggedInUser = await login(payload);
       toast.success('Login successful!');
-      if (loggedInUser.role === 'admin') {
+      if (loggedInUser.role === 'ADMIN') {
         router.push('/admin/dashboard');
-      } else {
+      } else if (loggedInUser.role === 'USER') {
         router.push('/dashboard');
+      } else {
+        router.push('/dashboard'); // fallback
       }
     } catch {
       toast.error(error || 'Login failed. Please try again.');
