@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FileCheck, Clock, Bookmark, Bell, Sparkles } from 'lucide-react';
+import { FileCheck, Clock, CheckCircle, Bookmark, Bell, Sparkles } from 'lucide-react';
 
 export default function DashboardPage() {
   const stats = [
