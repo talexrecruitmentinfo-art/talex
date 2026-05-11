@@ -87,20 +87,24 @@ export default function PaymentModal({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2"
+            className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6"
           >
-            <div className="rounded-2xl bg-white shadow-2xl overflow-hidden">
-              {/* Header */}
-              <div className="border-b border-slate-200 bg-gradient-to-r from-navy-50 to-blue-50 px-6 py-4 flex items-center justify-between">
-                <h2 className="text-xl font-bold text-slate-900">Complete Payment</h2>
-                <button
-                  onClick={onClose}
-                  className="rounded-lg p-1 hover:bg-slate-200 transition"
-                  aria-label="Close modal"
-                >
-                  <X className="h-5 w-5 text-slate-600" />
-                </button>
-              </div>
+            <div className="w-full max-w-lg">
+              <div className="overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-[0_40px_80px_rgba(15,23,42,0.18)]">
+                {/* Header */}
+                <div className="border-b border-slate-200 bg-slate-100 px-6 py-5 flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.35em] text-slate-500">Government Payment</p>
+                    <h2 className="mt-2 text-2xl font-semibold text-slate-900">Complete Payment</h2>
+                  </div>
+                  <button
+                    onClick={onClose}
+                    className="rounded-2xl p-2 text-slate-600 hover:bg-slate-200 transition"
+                    aria-label="Close modal"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
 
               {/* Body */}
               <form onSubmit={handleSubmit} className="space-y-6 p-6">
@@ -196,6 +200,7 @@ export default function PaymentModal({
                 </div>
               </form>
             </div>
+          </div>
           </motion.div>
         </>
       )}

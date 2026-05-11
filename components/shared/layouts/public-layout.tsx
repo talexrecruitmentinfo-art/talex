@@ -1,6 +1,7 @@
 'use client';
 
 import { type PropsWithChildren, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Footer from '@/components/shared/footer';
 import Navbar from '@/components/shared/navbar';
 import SidebarDrawer, { type SidebarItem } from '@/components/shared/sidebar-drawer';
@@ -19,25 +20,32 @@ const publicMenuItems: SidebarItem[] = [
 export default function PublicLayout({ children }: PropsWithChildren<unknown>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { isAuthenticated, logout } = useAuth();
+  const pathname = usePathname();
+  const hidePublicHeader = isAuthenticated && (pathname?.startsWith('/dashboard') || pathname?.startsWith('/admin'));
+  const hidePublicFooter = isAuthenticated;
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
-      <Navbar
-        onMenuClick={() => setSidebarOpen(!sidebarOpen)}
-        isAuthenticated={isAuthenticated}
-        showNotifications={!isAuthenticated}
-        showProfile={isAuthenticated}
-        onLogout={isAuthenticated ? logout : undefined}
-      />
-      <SidebarDrawer
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-        items={publicMenuItems}
-        title="Navigation"
-        onLogout={isAuthenticated ? logout : undefined}
-      />
+      {!hidePublicHeader && (
+        <>
+          <Navbar
+            onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+            isAuthenticated={isAuthenticated}
+            showNotifications={!isAuthenticated}
+            showProfile={isAuthenticated}
+            onLogout={isAuthenticated ? logout : undefined}
+          />
+          <SidebarDrawer
+            isOpen={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            items={publicMenuItems}
+            title="Navigation"
+            onLogout={isAuthenticated ? logout : undefined}
+          />
+        </>
+      )}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">{children}</main>
-      <Footer />
+      {!hidePublicFooter && <Footer />}
     </div>
   );
 }
