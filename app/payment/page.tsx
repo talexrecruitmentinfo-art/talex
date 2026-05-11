@@ -134,7 +134,7 @@ function PaymentContent() {
 
             <div className="bg-blue-50 border border-blue-200 rounded-3xl p-4 mb-6">
               <p className="text-sm text-blue-900">
-                <span className="font-semibold">How it works:</span> Click "Pay Now" and an M-Pesa prompt will appear on your phone. Enter your M-Pesa PIN to complete the payment.
+                <span className="font-semibold">How it works:</span> Click &quot;Pay Now&quot; and an M-Pesa prompt will appear on your phone. Enter your M-Pesa PIN to complete the payment.
               </p>
             </div>
 

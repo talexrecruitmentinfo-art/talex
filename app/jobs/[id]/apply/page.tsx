@@ -6,12 +6,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { Upload, X, CheckCircle } from 'lucide-react';
 
-interface ApplyPageProps {
-  params: {
-    id: string;
-  };
-}
-
 export default function ApplyPage() {
   const router = useRouter();
   const params = useParams();
