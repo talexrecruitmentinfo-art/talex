@@ -1,8 +1,34 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 import JobCard from '@/components/features/job-card';
 import { jobs } from '@/constants/jobs';
 import { Search, Filter } from 'lucide-react';
 
 export default function JobsPage() {
+  const router = useRouter();
+  const { isReady, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (isReady && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isReady, isAuthenticated, router]);
+
+  if (!isReady) {
+    return (
+      <div className="flex min-h-[calc(100vh-100px)] items-center justify-center">
+        <div className="text-slate-600">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className="space-y-8">
       {/* Header */}
