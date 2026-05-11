@@ -1,49 +1,146 @@
 import Link from 'next/link';
-import FeaturedJobs from '@/components/features/featured-jobs';
+import { CheckCircle2, CreditCard, FileText, TrendingUp } from 'lucide-react';
 import HeroSection from '@/components/features/hero-section';
 
 export default function HomePage() {
   return (
-    <div className="space-y-12">
+    <div className="space-y-16">
+      {/* Hero Section */}
       <HeroSection />
 
-      <section className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-card sm:p-10">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm uppercase tracking-[0.25em] text-brand-600">Search Canada jobs</p>
-            <h2 className="text-3xl font-semibold text-slate-900">Find roles by province, category, or visa sponsorship</h2>
-          </div>
+      {/* How It Works */}
+      <section className="space-y-8">
+        <div className="text-center">
+          <p className="text-sm font-semibold uppercase tracking-wider text-brand-500">Process</p>
+          <h2 className="mt-2 text-4xl font-bold text-navy-900">How It Works</h2>
+          <p className="mt-4 text-lg text-slate-600">Simple steps to apply for your dream Canada job</p>
         </div>
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-3xl bg-slate-50 p-5">
-            <p className="text-sm font-semibold text-slate-900">Verified jobs</p>
-            <p className="mt-3 text-sm text-slate-600">Every listing is reviewed and approved for Kenyan candidates.</p>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+          {[
+            { step: 1, title: 'Create Account', desc: 'Sign up with your email' },
+            { step: 2, title: 'Browse Jobs', desc: 'Explore verified Canada positions' },
+            { step: 3, title: 'Pay Fee', desc: 'Application fee: Ksh 500' },
+            { step: 4, title: 'Submit Application', desc: 'Complete job application form' },
+            { step: 5, title: 'Track Status', desc: 'Monitor your progress' },
+          ].map((item) => (
+            <div
+              key={item.step}
+              className="rounded-xl border border-slate-200 bg-white p-6 shadow-soft hover:shadow-card transition"
+            >
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 text-brand-600 font-bold text-lg">
+                {item.step}
+              </div>
+              <h3 className="font-semibold text-slate-900">{item.title}</h3>
+              <p className="mt-2 text-sm text-slate-600">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Statistics Section */}
+      <section className="rounded-2xl bg-gradient-to-r from-navy-500 to-navy-600 px-8 py-16 text-white shadow-card">
+        <div className="grid gap-8 sm:grid-cols-3">
+          <div className="text-center">
+            <div className="text-5xl font-bold">2,500+</div>
+            <p className="mt-2 text-blue-100">Applications Submitted</p>
           </div>
-          <div className="rounded-3xl bg-slate-50 p-5">
-            <p className="text-sm font-semibold text-slate-900">Secure payments</p>
-            <p className="mt-3 text-sm text-slate-600">M-Pesa support ensures easy payment without hidden charges.</p>
+          <div className="text-center">
+            <div className="text-5xl font-bold">450+</div>
+            <p className="mt-2 text-blue-100">Active Jobs</p>
           </div>
-          <div className="rounded-3xl bg-slate-50 p-5">
-            <p className="text-sm font-semibold text-slate-900">Fast mobile access</p>
-            <p className="mt-3 text-sm text-slate-600">Built to perform on low-end Android devices and limited data plans.</p>
+          <div className="text-center">
+            <div className="text-5xl font-bold">180+</div>
+            <p className="mt-2 text-blue-100">Approved Applicants</p>
           </div>
         </div>
       </section>
 
-      <FeaturedJobs />
+      {/* Why Choose Us */}
+      <section className="space-y-8">
+        <div className="text-center">
+          <p className="text-sm font-semibold uppercase tracking-wider text-brand-500">Benefits</p>
+          <h2 className="mt-2 text-4xl font-bold text-navy-900">Why Choose Talex?</h2>
+          <p className="mt-4 text-lg text-slate-600">The most trusted Canada job portal for Kenyans</p>
+        </div>
 
-      <section className="rounded-[32px] border border-slate-200 bg-brand-500 px-8 py-10 text-white shadow-card sm:px-12">
-        <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { icon: CheckCircle2, title: 'Verified Jobs', desc: 'All listings reviewed and approved for authenticity' },
+            { icon: CreditCard, title: 'Secure Payments', desc: 'M-Pesa integration for safe, transparent transactions' },
+            { icon: FileText, title: 'Easy Application', desc: 'Simple forms designed for mobile users' },
+            { icon: TrendingUp, title: 'Track Progress', desc: 'Real-time updates on your applications' },
+          ].map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={idx}
+                className="rounded-xl border border-slate-200 bg-white p-6 shadow-soft hover:shadow-card transition text-center"
+              >
+                <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-100">
+                  <Icon className="h-7 w-7 text-brand-600" />
+                </div>
+                <h3 className="font-semibold text-slate-900">{item.title}</h3>
+                <p className="mt-2 text-sm text-slate-600">{item.desc}</p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="space-y-8">
+        <div className="text-center">
+          <p className="text-sm font-semibold uppercase tracking-wider text-brand-500">Success Stories</p>
+          <h2 className="mt-2 text-4xl font-bold text-navy-900">What Our Users Say</h2>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            { name: 'John Mwangi', role: 'Software Engineer', text: 'Got a job offer within 2 weeks. The application process was smooth!' },
+            { name: 'Sarah Kipchoge', role: 'Nurse', text: 'Very impressed with the verified jobs. All listings are legitimate.' },
+            { name: 'David Ochieng', role: 'Project Manager', text: 'Finally found a platform I can trust. Highly recommended!' },
+          ].map((testimonial, idx) => (
+            <div
+              key={idx}
+              className="rounded-xl border border-slate-200 bg-white p-6 shadow-soft hover:shadow-card transition"
+            >
+              <div className="mb-4 flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400">★</span>
+                ))}
+              </div>
+              <p className="text-slate-700">&quot;{testimonial.text}&quot;</p>
+              <div className="mt-4 border-t border-slate-200 pt-4">
+                <p className="font-semibold text-slate-900">{testimonial.name}</p>
+                <p className="text-sm text-slate-600">{testimonial.role}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="rounded-2xl bg-brand-500 px-8 py-16 text-white shadow-card">
+        <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
           <div>
-            <p className="text-sm uppercase tracking-[0.25em] text-brand-100">Ready to apply?</p>
-            <h2 className="mt-4 text-3xl font-semibold">Create your account and start your Canada job application today.</h2>
+            <h2 className="text-3xl font-bold">Ready to Apply?</h2>
+            <p className="mt-4 text-lg text-brand-100">
+              Join thousands of Kenyan professionals who have already found their dream Canada jobs.
+            </p>
           </div>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/register" className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-brand-600 hover:bg-slate-100">
-              Register now
+          <div className="flex flex-wrap gap-4 justify-start lg:justify-end">
+            <Link
+              href="/register"
+              className="inline-flex items-center justify-center rounded-lg bg-white px-8 py-3 text-base font-semibold text-brand-600 hover:bg-blue-50 transition"
+            >
+              Create Account
             </Link>
-            <Link href="/jobs" className="inline-flex items-center justify-center rounded-full border border-white px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">
-              Browse jobs
+            <Link
+              href="/jobs"
+              className="inline-flex items-center justify-center rounded-lg border-2 border-white px-8 py-3 text-base font-semibold text-white hover:bg-white/10 transition"
+            >
+              Browse Jobs
             </Link>
           </div>
         </div>

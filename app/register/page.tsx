@@ -10,6 +10,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { Eye, EyeOff, User, Mail, Lock, CheckCircle2 } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -52,134 +53,178 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-md">
-        <div className="space-y-8">
-          <div className="space-y-3 text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-600">
-              Talex
-            </p>
-            <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
-              Create your account
-            </h1>
-            <p className="text-sm text-slate-600">
-              Build your Talex profile and get matched with verified Canadian roles.
-            </p>
+    <div className="min-h-[calc(100vh-65px)] bg-gradient-to-br from-navy-50 via-white to-blue-50 px-4 py-12 sm:px-6 lg:px-8 flex items-center">
+      <div className="mx-auto w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-navy-100 mb-4">
+            <User className="h-7 w-7 text-navy-600" />
           </div>
+          <h1 className="text-3xl font-bold text-navy-900">Create Account</h1>
+          <p className="mt-2 text-slate-600">Join thousands of Kenyans working in Canada</p>
+        </div>
 
-          <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-card">
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-              {errorMessage && (
-                <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
-                  {errorMessage}
-                </div>
-              )}
-              <div className="space-y-2">
-                <label htmlFor="name" className="block text-sm font-medium text-slate-700">
-                  Full name
-                </label>
+        {/* Form Card */}
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-soft">
+          <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+            {/* Error Message */}
+            {errorMessage && (
+              <div className="rounded-lg bg-brand-50 border border-brand-200 p-3 text-sm text-brand-700">
+                ⚠️ {errorMessage}
+              </div>
+            )}
+
+            {/* Full Name Field */}
+            <div className="space-y-2">
+              <label htmlFor="name" className="block text-sm font-semibold text-slate-900">
+                Full Name
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                 <Input 
                   id="name" 
-                  placeholder="John Doe"
+                  placeholder="John Mwangi Kipchoge"
+                  className="pl-10"
                   {...register('name')}
                   disabled={isSubmitting}
                 />
-                {errors.name && (
-                  <p className="text-xs text-red-500">{errors.name.message}</p>
-                )}
               </div>
+              {errors.name && (
+                <p className="text-xs text-brand-500 font-medium">{errors.name.message}</p>
+              )}
+            </div>
 
-              <div className="space-y-2">
-                <label htmlFor="email" className="block text-sm font-medium text-slate-700">
-                  Email address
-                </label>
+            {/* Email Field */}
+            <div className="space-y-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-slate-900">
+                Email Address
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                 <Input 
                   id="email" 
                   type="email" 
-                  placeholder="name@example.com"
+                  placeholder="your.email@example.com"
+                  className="pl-10"
                   {...register('email')}
                   disabled={isSubmitting}
                 />
-                {errors.email && (
-                  <p className="text-xs text-red-500">{errors.email.message}</p>
-                )}
               </div>
+              {errors.email && (
+                <p className="text-xs text-brand-500 font-medium">{errors.email.message}</p>
+              )}
+            </div>
 
-              <div className="space-y-2">
-                <label htmlFor="password" className="block text-sm font-medium text-slate-700">
-                  Password
-                </label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Create password"
-                    {...register('password')}
-                    disabled={isSubmitting}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((value) => !value)}
-                    className="absolute right-3 top-1/2 inline-flex -translate-y-1/2 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-200"
-                  >
-                    {showPassword ? 'Hide' : 'Show'}
-                  </button>
-                </div>
-                {errors.password && (
-                  <p className="text-xs text-red-500">{errors.password.message}</p>
-                )}
+            {/* Password Field */}
+            <div className="space-y-2">
+              <label htmlFor="password" className="block text-sm font-semibold text-slate-900">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Create a strong password"
+                  className="pl-10 pr-12"
+                  {...register('password')}
+                  disabled={isSubmitting}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((value) => !value)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
+              {errors.password && (
+                <p className="text-xs text-brand-500 font-medium">{errors.password.message}</p>
+              )}
+            </div>
 
-              <div className="space-y-2">
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700">
-                  Confirm password
-                </label>
-                <div className="relative">
-                  <Input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="Confirm password"
-                    {...register('confirmPassword')}
-                    disabled={isSubmitting}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword((value) => !value)}
-                    className="absolute right-3 top-1/2 inline-flex -translate-y-1/2 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-200"
-                  >
-                    {showConfirmPassword ? 'Hide' : 'Show'}
-                  </button>
-                </div>
-                {errors.confirmPassword && (
-                  <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
-                )}
+            {/* Confirm Password Field */}
+            <div className="space-y-2">
+              <label htmlFor="confirmPassword" className="block text-sm font-semibold text-slate-900">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                <Input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  placeholder="Confirm your password"
+                  className="pl-10 pr-12"
+                  {...register('confirmPassword')}
+                  disabled={isSubmitting}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((value) => !value)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
+              {errors.confirmPassword && (
+                <p className="text-xs text-brand-500 font-medium">{errors.confirmPassword.message}</p>
+              )}
+            </div>
 
-              <Button className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? 'Creating account...' : 'Create account'}
-              </Button>
+            {/* Submit Button */}
+            <Button className="w-full h-11 font-semibold" disabled={isSubmitting}>
+              {isSubmitting ? 'Creating account...' : 'Create Account'}
+            </Button>
 
-              <p className="text-center text-sm text-slate-700">
-                Already have an account?{' '}
-                <Link href="/login" className="font-semibold text-brand-600 hover:text-brand-700">
-                  Sign in
+            {/* Divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-200"></div>
+              </div>
+              <div className="relative flex justify-center text-xs">
+                <span className="bg-white px-2 text-slate-500">Already have an account?</span>
+              </div>
+            </div>
+
+            {/* Sign In Link */}
+            <Link href="/login" className="block w-full rounded-lg border-2 border-slate-200 px-4 py-2.5 text-center font-semibold text-slate-900 hover:bg-slate-50 transition">
+              Sign In
+            </Link>
+          </form>
+
+          {/* Terms Agreement */}
+          <div className="mt-6 rounded-lg bg-navy-50 border border-navy-100 p-4 space-y-3 text-xs text-navy-700">
+            <div className="flex gap-2">
+              <CheckCircle2 className="h-4 w-4 flex-shrink-0 mt-0.5 text-brand-500" />
+              <p>
+                By creating an account, you agree to our{' '}
+                <Link href="/terms" className="font-semibold text-brand-600 hover:underline">
+                  Terms of Service
+                </Link>
+                {' '}and{' '}
+                <Link href="/privacy-policy" className="font-semibold text-brand-600 hover:underline">
+                  Privacy Policy
                 </Link>
               </p>
-            </form>
-
-            <div className="mt-6 rounded-3xl bg-slate-50 p-4">
-              <p className="text-xs text-slate-600">
-                By creating an account, you agree to our{' '}
-                <Link href="/terms" className="font-medium text-brand-600 hover:text-brand-700">
-                  terms of service
-                </Link>{' '}
-                and{' '}
-                <Link href="/privacy-policy" className="font-medium text-brand-600 hover:text-brand-700">
-                  privacy policy
-                </Link>.
-              </p>
+            </div>
+            <div className="flex gap-2">
+              <CheckCircle2 className="h-4 w-4 flex-shrink-0 mt-0.5 text-brand-500" />
+              <p>Email verification required to complete registration</p>
             </div>
           </div>
+        </div>
+
+        {/* Footer Links */}
+        <div className="mt-6 text-center text-xs text-slate-600">
+          <p><Link href="/privacy-policy" className="hover:text-slate-900">Privacy Policy</Link> • <Link href="/terms" className="hover:text-slate-900">Terms</Link></p>
         </div>
       </div>
     </div>

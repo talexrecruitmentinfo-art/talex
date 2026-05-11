@@ -1,11 +1,32 @@
-import { type PropsWithChildren } from 'react';
+'use client';
+
+import { type PropsWithChildren, useState } from 'react';
 import Footer from '@/components/shared/footer';
 import Navbar from '@/components/shared/navbar';
+import SidebarDrawer, { type SidebarItem } from '@/components/shared/sidebar-drawer';
+import { Home, Briefcase, FileText, Phone, AlertCircle } from 'lucide-react';
+
+const publicMenuItems: SidebarItem[] = [
+  { label: 'Home', href: '/', icon: <Home className="h-5 w-5" /> },
+  { label: 'Browse Jobs', href: '/jobs', icon: <Briefcase className="h-5 w-5" /> },
+  { label: 'How It Works', href: '/how-it-works', icon: <FileText className="h-5 w-5" /> },
+  { label: 'About', href: '/about', icon: <FileText className="h-5 w-5" /> },
+  { label: 'Contact', href: '/contact', icon: <Phone className="h-5 w-5" /> },
+  { label: 'Report Issue', href: '/report', icon: <AlertCircle className="h-5 w-5" /> },
+];
 
 export default function PublicLayout({ children }: PropsWithChildren<unknown>) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <Navbar />
+    <div className="min-h-screen bg-white text-slate-900">
+      <Navbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} showNotifications={false} showProfile={false} />
+      <SidebarDrawer
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        items={publicMenuItems}
+        title="Navigation"
+      />
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">{children}</main>
       <Footer />
     </div>
