@@ -63,6 +63,7 @@ export default function PaymentModal({
       onClose();
     } catch (err) {
       setError('Failed to initiate payment. Please try again.');
+      console.error('Payment error:', err);
     } finally {
       setIsProcessing(false);
     }

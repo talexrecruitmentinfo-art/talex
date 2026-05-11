@@ -1,11 +1,12 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { CheckCircle, Copy, Download } from 'lucide-react';
+import { CheckCircle, Copy } from 'lucide-react';
 import { useState } from 'react';
 
-export default function ApplicationSuccessPage() {
+function SuccessContent() {
   const searchParams = useSearchParams();
   const trackingNumber = searchParams.get('tracking') || 'TALEX' + Math.random().toString(36).substr(2, 9).toUpperCase();
   const [copied, setCopied] = useState(false);
@@ -113,5 +114,13 @@ export default function ApplicationSuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ApplicationSuccessPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <SuccessContent />
+    </Suspense>
   );
 }

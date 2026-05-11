@@ -51,7 +51,7 @@ export const usePaymentStore = create<PaymentStore>((set) => ({
   checkPaymentStatus: async (transactionId: string) => {
     try {
       set({ isProcessing: true });
-      const result = await paymentService.verify(transactionId);
+      const result = await apiPaymentService.verify(transactionId);
       set({
         paymentStatus: result.status === 'success' ? 'success' : 'failed',
         isProcessing: false,
