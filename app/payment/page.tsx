@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
@@ -64,19 +62,15 @@ function PaymentContent() {
   return (
     <div className="min-h-[calc(100vh-100px)] bg-gradient-to-br from-navy-900 via-navy-800 to-blue-900 py-12">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="mb-12 text-center text-white">
           <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-300">Secure Payment</p>
           <h1 className="mt-3 text-4xl font-bold">Complete Your Application</h1>
           <p className="mt-2 text-slate-300">Pay the application fee using M-Pesa to submit your documents.</p>
         </div>
 
-        {/* Main Content */}
         <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
-          {/* Payment Summary */}
           <div className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm shadow-2xl">
             <h2 className="text-xl font-semibold text-white mb-6">Payment Summary</h2>
-            
             <div className="space-y-4 mb-8">
               <div className="flex items-center justify-between pb-4 border-b border-white/10">
                 <div className="flex items-center gap-3">
@@ -92,13 +86,10 @@ function PaymentContent() {
               </div>
 
               <div className="bg-emerald-500/10 border border-emerald-400/20 rounded-3xl p-4">
-                <p className="text-sm text-emerald-200">
-                  ✓ Your documents are securely stored
-                </p>
+                <p className="text-sm text-emerald-200">✓ Your documents are securely stored</p>
               </div>
             </div>
 
-            {/* Security Badge */}
             <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
               <div className="flex items-center gap-2 text-slate-300">
                 <Lock className="h-4 w-4 text-blue-400" />
@@ -107,11 +98,9 @@ function PaymentContent() {
             </div>
           </div>
 
-          {/* Payment Form */}
           <form onSubmit={handleSubmit} className="rounded-3xl border border-white/10 bg-white shadow-2xl p-8">
             <h2 className="text-2xl font-semibold text-slate-900 mb-6">Payment Method</h2>
 
-            {/* Applicant Info */}
             <div className="bg-slate-50 rounded-3xl p-4 mb-6">
               <div className="space-y-2">
                 <p className="text-sm text-slate-600">Applicant Name</p>
@@ -123,7 +112,6 @@ function PaymentContent() {
               </div>
             </div>
 
-            {/* Phone Number */}
             <div className="space-y-3 mb-6">
               <label className="block text-sm font-semibold text-slate-900">
                 M-Pesa Phone Number <span className="text-rose-500">*</span>
@@ -142,14 +130,12 @@ function PaymentContent() {
               <p className="text-xs text-slate-500">Enter your Kenyan phone number that has M-Pesa enabled.</p>
             </div>
 
-            {/* Info Box */}
             <div className="bg-blue-50 border border-blue-200 rounded-3xl p-4 mb-6">
               <p className="text-sm text-blue-900">
                 <span className="font-semibold">How it works:</span> Click "Pay Now" and an M-Pesa prompt will appear on your phone. Enter your M-Pesa PIN to complete the payment.
               </p>
             </div>
 
-            {/* Pay Button */}
             <button
               type="submit"
               disabled={isProcessing || !phoneNumber.trim()}
@@ -168,14 +154,12 @@ function PaymentContent() {
               )}
             </button>
 
-            {/* Footer Text */}
             <p className="text-xs text-center text-slate-500 mt-4">
               By proceeding, you agree to our Terms & Conditions and Privacy Policy
             </p>
           </form>
         </div>
 
-        {/* Trust Badges */}
         <div className="mt-12 flex items-center justify-center gap-6 text-white/70">
           <div className="flex items-center gap-2">
             <Lock className="h-4 w-4" />
