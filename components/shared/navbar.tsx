@@ -54,8 +54,17 @@ export default function Navbar({ onMenuClick, showNotifications = true, showProf
           </div>
         )}
 
-        {/* Right: Notifications & Profile or Logout */}
+        {/* Right: Notifications, Login, or Logout */}
         <div className="flex items-center gap-2 sm:gap-4">
+          {!isAuthenticated && (
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center rounded-full border border-white bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20"
+            >
+              Login
+            </Link>
+          )}
+
           {isAuthenticated && showProfile && (
             <button
               onClick={handleLogout}
@@ -66,6 +75,7 @@ export default function Navbar({ onMenuClick, showNotifications = true, showProf
               <span className="hidden sm:inline">Logout</span>
             </button>
           )}
+
           {!isAuthenticated && showNotifications && (
             <button
               className="relative inline-flex items-center justify-center rounded-lg p-2 text-white hover:bg-navy-800 transition"

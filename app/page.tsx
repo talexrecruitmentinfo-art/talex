@@ -20,9 +20,9 @@ export default function HomePage() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
           {[
             { step: 1, title: 'Create Account', desc: 'Sign up with your email' },
-            { step: 2, title: 'Browse Jobs', desc: 'Explore verified Canada positions' },
+            { step: 2, title: 'Prepare Documents', desc: 'Upload CV and passport page' },
             { step: 3, title: 'Pay Fee', desc: 'Application fee: Ksh 500' },
-            { step: 4, title: 'Submit Application', desc: 'Complete job application form' },
+            { step: 4, title: 'Submit Application', desc: 'Complete the upload and payment flow' },
             { step: 5, title: 'Track Status', desc: 'Monitor your progress' },
           ].map((item) => (
             <div
@@ -74,16 +74,16 @@ export default function HomePage() {
           </div>
           <div className="flex flex-wrap gap-4 justify-start lg:justify-end">
             <Link
-              href="/register"
+              href="/apply"
               className="inline-flex items-center justify-center rounded-lg bg-white px-8 py-3 text-base font-semibold text-brand-600 hover:bg-blue-50 transition"
             >
-              Create Account
+              Start Application
             </Link>
             <Link
-              href="/jobs"
+              href="/contact"
               className="inline-flex items-center justify-center rounded-lg border-2 border-white px-8 py-3 text-base font-semibold text-white hover:bg-white/10 transition"
             >
-              Browse Jobs
+              Contact Support
             </Link>
           </div>
         </div>
