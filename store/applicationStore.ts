@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import type { Application, CreateApplicationRequest, ApplicationStatus } from '@/types/application';
-import { applicationService } from '@/services/apiService';
+import { applicationService as apiApplicationService } from '@/services/apiService';
 
 interface ApplicationStore {
   applications: Application[];
@@ -22,7 +22,7 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
   fetchApplications: async () => {
     try {
       set({ isLoading: true, error: null });
-      const applications = await applicationService.getAll();
+      const applications = await apiApplicationService.getAll();
       set({ applications, isLoading: false });
     } catch (error) {
       set({
@@ -35,7 +35,7 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
   createApplication: async (data: CreateApplicationRequest) => {
     try {
       set({ isLoading: true, error: null });
-      const newApplication = await applicationService.create(data);
+      const newApplication = await apiApplicationService.create(data);
       set((state) => ({
         applications: [...state.applications, newApplication],
         isLoading: false,
@@ -52,7 +52,7 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
   updateApplicationStatus: async (id: string, status: ApplicationStatus) => {
     try {
       set({ isLoading: true, error: null });
-      const updatedApplication = await applicationService.updateStatus(id, status);
+      const updatedApplication = await apiApplicationService.updateStatus(id, status);
       set((state) => ({
         applications: state.applications.map((app) =>
           app.id === id ? updatedApplication : app

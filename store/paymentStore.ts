@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import { paymentService } from '@/services/apiService';
+import { paymentService as apiPaymentService } from '@/services/apiService';
 
 interface PaymentState {
   isProcessing: boolean;
@@ -31,7 +31,7 @@ export const usePaymentStore = create<PaymentStore>((set) => ({
         error: null,
       });
 
-      const result = await paymentService.stkpush(phoneNumber, amount);
+      const result = await apiPaymentService.stkpush(phoneNumber, amount);
 
       set({
         paymentStatus: 'stk_sent',
