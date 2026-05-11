@@ -37,7 +37,7 @@ export default function ApplyPage() {
       };
       console.log('Uploading files', applicationFiles);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      router.push('/payments?amount=500');
+      router.push('/payment?amount=500');
     } catch (uploadError) {
       console.error(uploadError);
       setError('Unable to process your files right now. Please try again later.');
