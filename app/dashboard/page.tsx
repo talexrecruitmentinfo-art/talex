@@ -60,7 +60,7 @@ export default function DashboardPage() {
                   <p className="text-sm font-medium text-slate-500">{stat.label}</p>
                   <p className="mt-3 text-3xl font-semibold text-slate-900">{stat.value}</p>
                 </div>
-                <div className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl ${colorStyles[stat.color]}`}>
+                <div className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl ${colorStyles[stat.color as keyof typeof colorStyles]}`}>
                   <Icon className="h-5 w-5" />
                 </div>
               </div>
