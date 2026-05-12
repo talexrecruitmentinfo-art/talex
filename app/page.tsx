@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import HeroSection from '@/components/features/hero-section';
 import TestimonialsSection from '@/components/features/testimonials-section';
 import WhyChooseUsSection from '@/components/features/why-choose-us';

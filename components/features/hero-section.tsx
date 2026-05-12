@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import { ArrowRight, Shield, Globe, Zap } from 'lucide-react';
+import { Shield, Globe, Zap } from 'lucide-react';
 
 export default function HeroSection() {
   return (
