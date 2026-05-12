@@ -20,15 +20,6 @@ export default function HeroSection() {
             Apply for verified visa-sponsored opportunities from Kenya. Secure payments. Fast processing. Professional support.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link href="/jobs" className="inline-flex items-center justify-center rounded-lg bg-white px-8 py-4 text-base font-semibold text-navy-600 hover:bg-blue-50 transition shadow-md">
-              Browse Jobs <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-            <Link href="/register" className="inline-flex items-center justify-center rounded-lg border-2 border-white px-8 py-4 text-base font-semibold text-white hover:bg-white/10 transition">
-              Create Account
-            </Link>
-          </div>
-
           {/* Trust Indicators */}
           <div className="mt-10 grid gap-4 sm:grid-cols-3">
             {[

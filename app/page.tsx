@@ -72,20 +72,6 @@ export default function HomePage() {
               Join thousands of Kenyan professionals who have already found their dream Canada jobs.
             </p>
           </div>
-          <div className="flex flex-wrap gap-4 justify-start lg:justify-end">
-            <Link
-              href="/apply"
-              className="inline-flex items-center justify-center rounded-lg bg-white px-8 py-3 text-base font-semibold text-brand-600 hover:bg-blue-50 transition"
-            >
-              Start Application
-            </Link>
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center rounded-lg border-2 border-white px-8 py-3 text-base font-semibold text-white hover:bg-white/10 transition"
-            >
-              Contact Support
-            </Link>
-          </div>
         </div>
       </section>
     </div>
