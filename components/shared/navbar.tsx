@@ -54,8 +54,17 @@ export default function Navbar({ onMenuClick, showNotifications = true, showProf
           </div>
         )}
 
-        {/* Right: Notifications, Login, or Logout */}
+        {/* Right: Notifications, Register, Login, or Logout */}
         <div className="flex items-center gap-2 sm:gap-4">
+          {!isAuthenticated && (
+            <Link
+              href="/register"
+              className="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-navy-700 transition hover:bg-slate-100"
+            >
+              Register
+            </Link>
+          )}
+
           {!isAuthenticated && (
             <Link
               href="/login"
