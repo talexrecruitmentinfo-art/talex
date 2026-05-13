@@ -24,6 +24,7 @@ module.exports = {
           600: "#dc2626",
         },
       },
+      },
       spacing: {
         navbar: "65px",
       },

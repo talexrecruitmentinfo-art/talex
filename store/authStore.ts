@@ -27,7 +27,25 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: true, error: null });
 
           const response = await authService.login(credentials);
-          const { user, token } = response;
+
+          // Handle wrapped response structure: { success, message, data: { token, user } }
+          const responseAny = response as any;
+          let user = null;
+          let token = null;
+
+          if (responseAny.success && responseAny.data) {
+            // Wrapped structure: response.data.user and response.data.token
+            user = responseAny.data.user;
+            token = responseAny.data.token;
+          } else if (responseAny.data) {
+            // Alternative wrapped: response.data.user and response.data.token
+            user = responseAny.data.user;
+            token = responseAny.data.token;
+          } else if (responseAny.user) {
+            // Unwrapped fallback: response.user and response.token
+            user = responseAny.user;
+            token = responseAny.token;
+          }
 
           if (!user || !token) {
             throw new Error('Server did not return required user data or token');
@@ -59,7 +77,25 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: true, error: null });
 
           const response = await authService.register(data);
-          const { user, token } = response;
+
+          // Handle wrapped response structure: { success, message, data: { token, user } }
+          const responseAny = response as any;
+          let user = null;
+          let token = null;
+
+          if (responseAny.success && responseAny.data) {
+            // Wrapped structure: response.data.user and response.data.token
+            user = responseAny.data.user;
+            token = responseAny.data.token;
+          } else if (responseAny.data) {
+            // Alternative wrapped: response.data.user and response.data.token
+            user = responseAny.data.user;
+            token = responseAny.data.token;
+          } else if (responseAny.user) {
+            // Unwrapped fallback: response.user and response.token
+            user = responseAny.user;
+            token = responseAny.token;
+          }
 
           if (!user || !token) {
             throw new Error('Server did not return required user data or token');

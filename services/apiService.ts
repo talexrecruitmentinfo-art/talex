@@ -292,9 +292,9 @@ export const adminService = {
     return unwrapResponse<unknown>(res);
   },
 
-  getUsers: async (): Promise<unknown[]> => {
+  getUsers: async (): Promise<User[]> => {
     const res = await API.get('/admin/users');
-    return unwrapResponse<unknown[]>(res);
+    return unwrapResponse<User[]>(res);
   },
 
     getUserById: async (userId: string): Promise<unknown> => {
