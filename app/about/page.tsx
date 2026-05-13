@@ -69,7 +69,7 @@ export default function AboutPage() {
   useEffect(() => {
     const loadAboutInfo = async () => {
       try {
-        const apiData = await aboutService.getInfo();
+        const apiData = (await aboutService.getInfo()) as Partial<AboutInfo>;
         if (apiData) {
           setAboutInfo((prev) => ({
             ...prev,
