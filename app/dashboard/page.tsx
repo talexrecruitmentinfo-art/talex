@@ -130,8 +130,8 @@ export default function DashboardPage() {
           </div>
           <Link href="/dashboard/applications" className="text-sm font-semibold text-brand-600 hover:text-brand-700">View details →</Link>
         </div>
-        <div className="mt-6 overflow-hidden rounded-3xl border border-slate-200">
-          <table className="w-full text-left text-sm text-slate-600">
+        <div className="mt-6 overflow-x-auto rounded-3xl border border-slate-200">
+          <table className="min-w-[720px] w-full text-left text-sm text-slate-600">
             <thead className="bg-slate-50 text-slate-700">
               <tr>
                 <th className="px-6 py-4 font-medium">Job Title</th>

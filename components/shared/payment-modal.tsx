@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Loader } from 'lucide-react';
+import { paymentService } from '@/services/apiService';
 
 interface PaymentModalProps {
   isOpen: boolean;
   jobId: string;
   jobTitle: string;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (transactionId: string) => void;
 }
 
 export default function PaymentModal({
@@ -40,26 +41,14 @@ export default function PaymentModal({
     setIsProcessing(true);
 
     try {
-      // Simulating STK push - replace with actual M-Pesa integration
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const response = await paymentService.stkpush(phoneNumber, 500, jobId);
+      const transactionId = response.transactionId;
 
-      // Call your backend API to initiate M-Pesa STK push
-      const response = await fetch('/api/payments/mpesa-stk-push', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          jobId,
-          phoneNumber,
-          amount: 500,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Payment initiation failed');
+      if (!transactionId) {
+        throw new Error('Payment initiation did not return a transaction reference');
       }
 
-      // Success - redirect or show success message
-      onSuccess();
+      onSuccess(transactionId);
       onClose();
     } catch (err) {
       setError('Failed to initiate payment. Please try again.');

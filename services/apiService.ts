@@ -1,9 +1,50 @@
 import API from '@/lib/api';
-import type { AuthResponse, LoginRequest, RegisterRequest } from '@/types/auth';
+import type { AxiosResponse } from 'axios';
+import type { AuthResponse, LoginRequest, RegisterRequest, User } from '@/types/auth';
 import type { Application, CreateApplicationRequest, ApplicationStatus } from '@/types/application';
 import type { Job } from '@/types/job';
 import type { Notification } from '@/types/notification';
 import type { Profile, UpdateProfileRequest } from '@/types/profile';
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function unwrapResponse<T>(response: AxiosResponse<unknown>): T {
+  const body = response.data;
+  const extract = (payload: unknown): unknown => {
+    if (!isRecord(payload)) return payload;
+    const keys = [
+      'jobs',
+      'job',
+      'applications',
+      'application',
+      'profile',
+      'notifications',
+      'documents',
+      'users',
+      'payments',
+      'supportRequests',
+      'document',
+      'user',
+    ] as const;
+    for (const key of keys) {
+      if (key in payload && payload[key] !== undefined) {
+        return payload[key];
+      }
+    }
+    return payload;
+  };
+
+  if (body && typeof body === 'object') {
+    if (body.data !== undefined) {
+      return extract(body.data) as T;
+    }
+    return extract(body) as T;
+  }
+
+  return body as T;
+}
 
 /**
  * Auth Service
@@ -11,7 +52,7 @@ import type { Profile, UpdateProfileRequest } from '@/types/profile';
 export const authService = {
   login: async (data: LoginRequest): Promise<AuthResponse> => {
     const res = await API.post('/auth/login', data);
-    return res.data;
+    return unwrapResponse<AuthResponse>(res);
   },
 
   register: async (data: RegisterRequest | FormData): Promise<AuthResponse> => {
@@ -19,7 +60,7 @@ export const authService = {
       headers: { 'Content-Type': 'multipart/form-data' }
     } : {};
     const res = await API.post('/auth/register', data, config);
-    return res.data;
+    return unwrapResponse<AuthResponse>(res);
   },
 
   verify: async (token: string): Promise<void> => {
@@ -28,7 +69,7 @@ export const authService = {
 
   refresh: async (): Promise<AuthResponse> => {
     const res = await API.post('/auth/refresh');
-    return res.data;
+    return unwrapResponse<AuthResponse>(res);
   },
 
   logout: async (): Promise<void> => {
@@ -48,34 +89,34 @@ export const authService = {
  * Job Service
  */
 export const jobServiceAPI = {
-  getAll: async (filters?: Record<string, any>): Promise<Job[]> => {
+  getAll: async (filters?: Record<string, unknown>): Promise<Job[]> => {
     const res = await API.get('/jobs', { params: filters });
-    return res.data;
+    return unwrapResponse<Job[]>(res);
   },
 
-  getJobs: async (filters?: Record<string, any>): Promise<Job[]> => {
+  getJobs: async (filters?: Record<string, unknown>): Promise<Job[]> => {
     const res = await API.get('/jobs', { params: filters });
-    return res.data;
+    return unwrapResponse<Job[]>(res);
   },
 
   getById: async (id: string): Promise<Job | null> => {
     const res = await API.get(`/jobs/${id}`);
-    return res.data;
+    return unwrapResponse<Job | null>(res);
   },
 
-  search: async (params?: Record<string, any>): Promise<Job[]> => {
+  search: async (params?: Record<string, unknown>): Promise<Job[]> => {
     const res = await API.get('/jobs/search', { params });
-    return res.data;
+    return unwrapResponse<Job[]>(res);
   },
 
-  create: async (data: any): Promise<Job> => {
-    const res = await API.post('/jobs', data);
-    return res.data;
+  create: async (data: Record<string, unknown>): Promise<Job> => {
+    const res = await API.post('/admin/jobs/create', data);
+    return unwrapResponse<Job>(res);
   },
 
-  update: async (id: string, data: any): Promise<Job> => {
+  update: async (id: string, data: Record<string, unknown>): Promise<Job> => {
     const res = await API.put(`/admin/jobs/update/${id}`, data);
-    return res.data;
+    return unwrapResponse<Job>(res);
   },
 
   delete: async (id: string): Promise<void> => {
@@ -89,22 +130,22 @@ export const jobServiceAPI = {
 export const applicationService = {
   getAll: async (): Promise<Application[]> => {
     const res = await API.get('/applications/user');
-    return res.data;
+    return unwrapResponse<Application[]>(res);
   },
 
   getById: async (id: string): Promise<Application | null> => {
     const res = await API.get(`/applications/${id}`);
-    return res.data;
+    return unwrapResponse<Application | null>(res);
   },
 
   create: async (data: CreateApplicationRequest): Promise<Application> => {
     const res = await API.post('/applications/create', data);
-    return res.data;
+    return unwrapResponse<Application>(res);
   },
 
   applyJob: async (jobId: string, data: CreateApplicationRequest): Promise<Application> => {
-    const res = await API.post(`/applications/${jobId}`, data);
-    return res.data;
+    const res = await API.post('/applications/create', { ...data, jobId });
+    return unwrapResponse<Application>(res);
   },
 
   updateStatus: async (id: string, status: ApplicationStatus): Promise<Application> => {
@@ -112,7 +153,7 @@ export const applicationService = {
       applicationId: id,
       status,
     });
-    return res.data;
+    return unwrapResponse<Application>(res);
   },
 };
 
@@ -127,19 +168,19 @@ export const supportService = {
     priority?: string;
     name?: string;
     email?: string;
-  }): Promise<any> => {
+  }): Promise<unknown> => {
     const res = await API.post('/support', data);
-    return res.data;
+    return unwrapResponse<unknown>(res);
   },
 
-  getAll: async (): Promise<any[]> => {
+  getAll: async (): Promise<unknown[]> => {
     const res = await API.get('/support');
-    return res.data;
+    return unwrapResponse<unknown[]>(res);
   },
 
-  reply: async (requestId: string, reply: string): Promise<any> => {
+  reply: async (requestId: string, reply: string): Promise<unknown> => {
     const res = await API.patch('/admin/support-requests/reply', { requestId, reply });
-    return res.data;
+    return unwrapResponse<unknown>(res);
   },
 };
 
@@ -149,12 +190,12 @@ export const supportService = {
 export const profileService = {
   get: async (): Promise<Profile | null> => {
     const res = await API.get('/profile');
-    return res.data;
+    return unwrapResponse<Profile | null>(res);
   },
 
   update: async (data: UpdateProfileRequest): Promise<Profile> => {
     const res = await API.put('/profile', data);
-    return res.data;
+    return unwrapResponse<Profile>(res);
   },
 };
 
@@ -162,9 +203,9 @@ export const profileService = {
  * About Service
  */
 export const aboutService = {
-  getInfo: async (): Promise<any> => {
+  getInfo: async (): Promise<unknown> => {
     const res = await API.get('/about');
-    return res.data;
+    return unwrapResponse<unknown>(res);
   },
 };
 
@@ -174,7 +215,7 @@ export const aboutService = {
 export const notificationService = {
   getAll: async (): Promise<Notification[]> => {
     const res = await API.get('/notifications');
-    return res.data;
+    return unwrapResponse<Notification[]>(res);
   },
 
   markAsRead: async (id: string): Promise<void> => {
@@ -186,18 +227,18 @@ export const notificationService = {
  * Payment Service
  */
 export const paymentService = {
-  stkpush: async (phoneNumber: string, amount: number): Promise<{ transactionId: string }> => {
-    const res = await API.post('/payments/stkpush', { phone: phoneNumber, amount });
-    return res.data;
+  stkpush: async (phoneNumber: string, amount: number, jobId?: string): Promise<{ transactionId: string }> => {
+    const res = await API.post('/payments/stkpush', { phone: phoneNumber, amount, jobId });
+    return unwrapResponse<{ transactionId: string }>(res);
   },
 
-  callback: async (data: any): Promise<void> => {
+  callback: async (data: Record<string, unknown>): Promise<void> => {
     await API.post('/payments/callback', data);
   },
 
   verify: async (transactionId: string): Promise<{ status: string }> => {
     const res = await API.post('/payments/verify', { transactionId });
-    return res.data;
+    return unwrapResponse<{ status: string }>(res);
   },
 };
 
@@ -205,7 +246,7 @@ export const paymentService = {
  * Upload Service
  */
 export const uploadService = {
-  uploadResume: async (file: File): Promise<any> => {
+  uploadResume: async (file: File): Promise<unknown> => {
     const formData = new FormData();
     formData.append('resume', file);
     const res = await API.post('/upload/upload-resume', formData, {
@@ -213,7 +254,12 @@ export const uploadService = {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return res.data;
+    return unwrapResponse<unknown>(res);
+  },
+
+  getDocuments: async (): Promise<unknown[]> => {
+    const res = await API.get('/upload/documents');
+    return unwrapResponse<unknown[]>(res);
   },
 };
 
@@ -223,42 +269,57 @@ export const uploadService = {
 export const adminService = {
   getApplications: async (): Promise<Application[]> => {
     const res = await API.get('/admin/applications');
-    return res.data;
+    return unwrapResponse<Application[]>(res);
   },
 
   updateApplicationStatus: async (applicationId: string, status: ApplicationStatus): Promise<Application> => {
     const res = await API.patch('/admin/applications/update-status', { applicationId, status });
-    return res.data;
+    return unwrapResponse<Application>(res);
   },
 
   updateApplicationStage: async (applicationId: string, stage: string): Promise<Application> => {
     const res = await API.put(`/admin/applications/${applicationId}/stage`, { stage });
-    return res.data;
+    return unwrapResponse<Application>(res);
   },
 
-  getSupportRequests: async (): Promise<any[]> => {
+  getSupportRequests: async (): Promise<unknown[]> => {
     const res = await API.get('/admin/support-requests');
-    return res.data;
+    return unwrapResponse<unknown[]>(res);
   },
 
-  replySupportRequest: async (requestId: string, reply: string): Promise<any> => {
+  replySupportRequest: async (requestId: string, reply: string): Promise<unknown> => {
     const res = await API.patch('/admin/support-requests/reply', { requestId, reply });
-    return res.data;
+    return unwrapResponse<unknown>(res);
   },
 
-  getUsers: async (): Promise<any[]> => {
+  getUsers: async (): Promise<unknown[]> => {
     const res = await API.get('/admin/users');
-    return res.data;
+    return unwrapResponse<unknown[]>(res);
   },
 
-  getPayments: async (): Promise<any[]> => {
-    const res = await API.get('/admin/payments');
-    return res.data;
-  },
+    getUserById: async (userId: string): Promise<unknown> => {
+      const res = await API.get(`/admin/users/${userId}`);
+      return unwrapResponse<unknown>(res);
+    },
 
-  getDashboard: async (): Promise<any> => {
+    banUser: async (userId: string, ban: boolean): Promise<unknown> => {
+      const res = await API.patch(`/admin/users/${userId}/ban`, { ban });
+      return unwrapResponse<unknown>(res);
+    },
+
+    resetUserPassword: async (userId: string, newPassword: string): Promise<unknown> => {
+      const res = await API.patch(`/admin/users/${userId}/password`, { newPassword });
+      return unwrapResponse<unknown>(res);
+    },
+
+    updateUser: async (userId: string, data: Partial<User>): Promise<unknown> => {
+      const res = await API.patch(`/admin/users/${userId}`, data);
+      return unwrapResponse<unknown>(res);
+    },
+
+  getDashboard: async (): Promise<unknown> => {
     const res = await API.get('/admin/dashboard');
-    return res.data;
+    return unwrapResponse<unknown>(res);
   },
 };
 
@@ -273,8 +334,8 @@ export const reportService = {
     email?: string;
     startDate?: string;
     endDate?: string;
-  }): Promise<any> => {
+  }): Promise<unknown> => {
     const res = await API.post('/report', data);
-    return res.data;
+    return unwrapResponse<unknown>(res);
   },
 };

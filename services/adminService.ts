@@ -1,12 +1,27 @@
 import API from '@/lib/api';
+import type { AxiosResponse } from 'axios';
 import type { Job } from '@/types/job';
+
+function unwrapResponse<T>(response: AxiosResponse<unknown>): T {
+  const body = response.data;
+  if (body && typeof body === 'object' && body !== null) {
+    const record = body as Record<string, unknown>;
+    if (record.data !== undefined) return record.data as T;
+    if (record.job !== undefined) return record.job as T;
+    if (record.jobs !== undefined) return record.jobs as T;
+    if (record.users !== undefined) return record.users as T;
+    if (record.payments !== undefined) return record.payments as T;
+    if (record.applications !== undefined) return record.applications as T;
+  }
+  return body as T;
+}
 
 export const adminService = {
   // Jobs Management
   createJob: async (jobData: Partial<Job>) => {
     try {
-      const response = await API.post('/admin/jobs', jobData);
-      return response.data;
+      const response = await API.post('/admin/jobs/create', jobData);
+      return unwrapResponse<Job>(response);
     } catch (error) {
       throw error;
     }
@@ -14,8 +29,8 @@ export const adminService = {
 
   updateJob: async (jobId: string, jobData: Partial<Job>) => {
     try {
-      const response = await API.put(`/admin/jobs/${jobId}`, jobData);
-      return response.data;
+      const response = await API.put(`/admin/jobs/update/${jobId}`, jobData);
+      return unwrapResponse<Job>(response);
     } catch (error) {
       throw error;
     }
@@ -23,8 +38,8 @@ export const adminService = {
 
   deleteJob: async (jobId: string) => {
     try {
-      const response = await API.delete(`/admin/jobs/${jobId}`);
-      return response.data;
+      const response = await API.delete(`/admin/jobs/delete/${jobId}`);
+      return unwrapResponse<unknown>(response);
     } catch (error) {
       throw error;
     }
@@ -47,7 +62,7 @@ export const adminService = {
       const response = await API.get('/admin/applications', {
         params: { page, limit, status },
       });
-      return response.data;
+      return unwrapResponse<unknown[]>(response);
     } catch (error) {
       throw error;
     }
@@ -56,7 +71,7 @@ export const adminService = {
   approveApplication: async (applicationId: string) => {
     try {
       const response = await API.post(`/admin/applications/${applicationId}/approve`);
-      return response.data;
+      return unwrapResponse<unknown>(response);
     } catch (error) {
       throw error;
     }
@@ -65,7 +80,7 @@ export const adminService = {
   rejectApplication: async (applicationId: string, reason: string) => {
     try {
       const response = await API.post(`/admin/applications/${applicationId}/reject`, { reason });
-      return response.data;
+      return unwrapResponse<unknown>(response);
     } catch (error) {
       throw error;
     }
@@ -74,7 +89,7 @@ export const adminService = {
   shortlistApplication: async (applicationId: string) => {
     try {
       const response = await API.post(`/admin/applications/${applicationId}/shortlist`);
-      return response.data;
+      return unwrapResponse<unknown>(response);
     } catch (error) {
       throw error;
     }
@@ -86,7 +101,7 @@ export const adminService = {
       const response = await API.get('/admin/users', {
         params: { page, limit },
       });
-      return response.data;
+      return unwrapResponse<unknown[]>(response);
     } catch (error) {
       throw error;
     }
@@ -95,16 +110,16 @@ export const adminService = {
   getUserById: async (userId: string) => {
     try {
       const response = await API.get(`/admin/users/${userId}`);
-      return response.data;
+      return unwrapResponse<unknown>(response);
     } catch (error) {
       throw error;
     }
   },
 
-  deactivateUser: async (userId: string) => {
+  banUser: async (userId: string, ban: boolean) => {
     try {
-      const response = await API.post(`/admin/users/${userId}/deactivate`);
-      return response.data;
+      const response = await API.patch(`/admin/users/${userId}/ban`, { ban });
+      return unwrapResponse<unknown>(response);
     } catch (error) {
       throw error;
     }
@@ -125,7 +140,7 @@ export const adminService = {
   getPaymentById: async (paymentId: string) => {
     try {
       const response = await API.get(`/admin/payments/${paymentId}`);
-      return response.data;
+      return unwrapResponse<unknown>(response);
     } catch (error) {
       throw error;
     }

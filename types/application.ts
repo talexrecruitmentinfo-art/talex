@@ -34,5 +34,6 @@ export type Application = {
 
 export type CreateApplicationRequest = {
   jobId: string;
-  paymentStatus?: 'pending' | 'completed';
+  paymentId?: string;
+  paymentStatus?: 'pending' | 'completed' | 'failed';
 };

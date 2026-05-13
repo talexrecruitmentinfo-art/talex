@@ -27,21 +27,7 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: true, error: null });
 
           const response = await authService.login(credentials);
-          
-          // Handle backend response structure: { success, message, data: { token, role, user } }
-          const responseAny = response as any;
-          let user = null;
-          let token = null;
-
-          if (responseAny.data) {
-            // New structure: response.data.user and response.data.token
-            user = responseAny.data.user;
-            token = responseAny.data.token;
-          } else if (responseAny.user) {
-            // Old structure: response.user and response.token
-            user = responseAny.user;
-            token = responseAny.token;
-          }
+          const { user, token } = response;
 
           if (!user || !token) {
             throw new Error('Server did not return required user data or token');
@@ -73,21 +59,7 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: true, error: null });
 
           const response = await authService.register(data);
-          
-          // Handle backend response structure: { success, message, data: { token, role, user } }
-          const responseAny = response as any;
-          let user = null;
-          let token = null;
-
-          if (responseAny.data) {
-            // New structure: response.data.user and response.data.token
-            user = responseAny.data.user;
-            token = responseAny.data.token;
-          } else if (responseAny.user) {
-            // Old structure: response.user and response.token
-            user = responseAny.user;
-            token = responseAny.token;
-          }
+          const { user, token } = response;
 
           if (!user || !token) {
             throw new Error('Server did not return required user data or token');

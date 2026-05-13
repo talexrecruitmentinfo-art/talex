@@ -1,7 +1,7 @@
 const steps = [
   { label: 'Create account', description: 'Register with your phone and email to start applying.' },
   { label: 'Complete profile', description: 'Add your education, experience, and documents.' },
-  { label: 'Browse jobs', description: 'Filter verified Canada roles for your skill set.' },
+  { label: 'Explore roles', description: 'Filter verified Canada positions for your skill set.' },
   { label: 'Apply & pay', description: 'Submit your application and complete the M-Pesa fee.' },
   { label: 'Track application', description: 'Follow your progress from the dashboard.' },
 ];

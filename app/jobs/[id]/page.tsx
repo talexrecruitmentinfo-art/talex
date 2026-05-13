@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import PaymentModal from '@/components/shared/payment-modal';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { applicationService } from '@/services/apiService';
+import { jobServiceAPI } from '@/services/apiService';
+import type { Job } from '@/types/job';
 
 interface JobDetailPageProps {
   params: {
@@ -16,37 +19,30 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
   const { user } = useAuthStore();
   const router = useRouter();
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [job, setJob] = useState<Job | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // For now, we'll use a mock job since we can't fetch on client side easily
-  // In a real app, you'd fetch this data
-  const job = {
-    id: params.id,
-    title: 'Hospitality Supervisor',
-    company: 'Canadian Hospitality Group',
-    location: 'Toronto, Ontario',
-    type: 'Full-time',
-    category: 'Hospitality',
-    salary: 'CA$ 45,000 - 55,000/year',
-    description: 'We are seeking an experienced Hospitality Supervisor to join our team in Toronto. This role involves managing daily operations, supervising staff, and ensuring excellent guest experiences.',
-    requirements: [
-      'Minimum 3 years hospitality management experience',
-      'Valid work permit or eligible for visa sponsorship',
-      'Strong leadership and communication skills',
-      'Knowledge of hospitality industry standards'
-    ],
-    benefits: [
-      'Competitive salary with performance bonuses',
-      'Visa sponsorship for qualified candidates',
-      'Health insurance and retirement plan',
-      'Professional development opportunities'
-    ],
-    deadline: '2026-06-30'
-  };
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        setIsLoading(true);
+        const fetchedJob = await jobServiceAPI.getById(params.id);
+        if (!fetchedJob) {
+          setError('Job not found.');
+          setJob(null);
+          return;
+        }
+        setJob(fetchedJob);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load job details.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  // Since we're using mock data, job always exists
-  // if (!job) {
-  //   notFound();
-  // }
+    fetchJob();
+  }, [params.id]);
 
   const handleApply = () => {
     if (!user) {
@@ -56,10 +52,32 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     setPaymentModalOpen(true);
   };
 
-  const handlePaymentSuccess = () => {
-    toast.success('Payment successful! Application submitted.');
-    router.push('/applications/success?tracking=TALEX' + Math.random().toString(36).substr(2, 9).toUpperCase());
+  const handlePaymentSuccess = async (transactionId: string) => {
+    try {
+      await applicationService.create({ jobId: params.id, paymentId: transactionId });
+      toast.success('Payment successful! Application submitted.');
+      router.push('/applications/success?tracking=TALEX' + Math.random().toString(36).substr(2, 9).toUpperCase());
+    } catch (error) {
+      toast.error('Unable to create the application after payment. Please contact support.');
+      console.error(error);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[calc(100vh-100px)] items-center justify-center">
+        <div className="text-slate-600">Loading job details...</div>
+      </div>
+    );
+  }
+
+  if (error || !job) {
+    return (
+      <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center text-red-700 shadow-soft">
+        {error || 'Job not found.'}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
