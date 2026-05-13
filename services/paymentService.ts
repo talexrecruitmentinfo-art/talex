@@ -19,7 +19,7 @@ function unwrapResponse<T>(response: AxiosResponse<unknown>): T {
   };
 
   if (body && typeof body === 'object') {
-    if (body.data !== undefined) {
+    if ('data' in body && body.data !== undefined) {
       return extract(body.data) as T;
     }
     return extract(body) as T;

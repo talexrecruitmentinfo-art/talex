@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
 import { adminService } from '@/services/apiService';
+import type { AdminUser } from '@/types/auth';
 
 export default function AdminUsersPage() {
   const { user } = useAuthStore();
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actioningId, setActioningId] = useState<string | null>(null);
@@ -39,16 +40,18 @@ export default function AdminUsersPage() {
     loadUsers();
   }, [user]);
 
+  const getUserId = (userItem: AdminUser): string => userItem.id || userItem._id || userItem.email;
+
   const handleBan = async (userId: string) => {
     if (actioningId) return;
     if (!window.confirm('Are you sure you want to ban this user?')) return;
 
     try {
       setActioningId(userId);
-      await adminService.deactivateUser(userId);
+      await adminService.banUser(userId, true);
       setUsers((prev) =>
         prev.map((userItem) =>
-          userItem.id === userId || userItem._id === userId
+          getUserId(userItem) === userId
             ? { ...userItem, status: 'Banned' }
             : userItem
         )
@@ -143,7 +146,7 @@ export default function AdminUsersPage() {
               </tr>
             ) : (
               users.map((userItem) => {
-                const userId = userItem.id || userItem._id || userItem.email;
+                const userId = getUserId(userItem);
                 const status = userItem.status || 'Active';
 
                 return (

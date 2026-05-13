@@ -14,7 +14,7 @@ export default function AdminEditUserPage() {
 
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [role, setRole] = useState('USER');
+  const [role, setRole] = useState<'USER' | 'ADMIN'>('USER');
   const [status, setStatus] = useState('Active');
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -131,7 +131,7 @@ export default function AdminEditUserPage() {
             <label className="block text-sm font-medium text-slate-700">Role</label>
             <select
               value={role}
-              onChange={(event) => setRole(event.target.value)}
+              onChange={(event) => setRole(event.target.value as 'USER' | 'ADMIN')}
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-brand-500"
             >
               <option value="USER">User</option>

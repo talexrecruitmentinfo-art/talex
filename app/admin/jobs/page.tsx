@@ -5,13 +5,16 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
 import { jobServiceAPI } from '@/services/apiService';
+import type { Job } from '@/types/job';
 
 export default function AdminJobsPage() {
   const { user } = useAuthStore();
-  const [jobs, setJobs] = useState<any[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const getJobId = (job: Job): string => job.id || job._id || '';
 
   useEffect(() => {
     if (!user) return;
@@ -46,7 +49,7 @@ export default function AdminJobsPage() {
     try {
       setDeletingId(jobId);
       await jobServiceAPI.delete(jobId);
-      setJobs((prev) => prev.filter((job) => (job.id || job._id) !== jobId));
+      setJobs((prev) => prev.filter((job) => getJobId(job) !== jobId));
       toast.success('Job deleted successfully');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to delete job';
@@ -125,7 +128,7 @@ export default function AdminJobsPage() {
               </tr>
             ) : (
               jobs.map((job) => {
-                const jobId = job.id || job._id || '';
+                const jobId = getJobId(job);
                 return (
                   <tr key={jobId || job.title}>
                     <td className="px-4 py-4">{job.title || 'Untitled'}</td>

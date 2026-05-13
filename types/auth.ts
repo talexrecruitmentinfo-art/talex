@@ -9,6 +9,12 @@ export type User = {
   resume?: string | null;
 };
 
+export type AdminUser = User & {
+  _id?: string;
+  status?: string;
+  fullName?: string;
+};
+
 export type AuthState = {
   user: User | null;
   token: string | null;

@@ -11,6 +11,7 @@ const statusConfig = {
   interview: { label: 'Interview', color: 'purple', icon: Clock },
   accepted: { label: 'Accepted', color: 'green', icon: CheckCircle },
   rejected: { label: 'Rejected', color: 'red', icon: XCircle },
+  pending: { label: 'Pending', color: 'gray', icon: Clock },
 };
 
 export default function ApplicationsPage() {

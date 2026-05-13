@@ -1,5 +1,6 @@
 export type Job = {
   id: string;
+  _id?: string;
   title: string;
   company: string;
   salary: string;
@@ -12,5 +13,7 @@ export type Job = {
   description: string;
   requirements: string[];
   benefits: string[];
+  applications?: number;
+  status?: string;
   sponsored: boolean;
 };

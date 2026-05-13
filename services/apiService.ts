@@ -1,6 +1,6 @@
 import API from '@/lib/api';
 import type { AxiosResponse } from 'axios';
-import type { AuthResponse, LoginRequest, RegisterRequest, User } from '@/types/auth';
+import type { AuthResponse, LoginRequest, RegisterRequest, User, AdminUser } from '@/types/auth';
 import type { Application, CreateApplicationRequest, ApplicationStatus } from '@/types/application';
 import type { Job } from '@/types/job';
 import type { Notification } from '@/types/notification';
@@ -37,7 +37,7 @@ function unwrapResponse<T>(response: AxiosResponse<unknown>): T {
   };
 
   if (body && typeof body === 'object') {
-    if (body.data !== undefined) {
+    if ('data' in body && body.data !== undefined) {
       return extract(body.data) as T;
     }
     return extract(body) as T;
@@ -246,7 +246,7 @@ export const paymentService = {
  * Upload Service
  */
 export const uploadService = {
-  uploadResume: async (file: File): Promise<unknown> => {
+  uploadResume: async (file: File): Promise<{ fileUrl?: string }> => {
     const formData = new FormData();
     formData.append('resume', file);
     const res = await API.post('/upload/upload-resume', formData, {
@@ -254,7 +254,7 @@ export const uploadService = {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return unwrapResponse<unknown>(res);
+    return unwrapResponse<{ fileUrl?: string }>(res);
   },
 
   getDocuments: async (): Promise<unknown[]> => {
@@ -292,14 +292,14 @@ export const adminService = {
     return unwrapResponse<unknown>(res);
   },
 
-  getUsers: async (): Promise<unknown[]> => {
+  getUsers: async (): Promise<AdminUser[]> => {
     const res = await API.get('/admin/users');
-    return unwrapResponse<unknown[]>(res);
+    return unwrapResponse<AdminUser[]>(res);
   },
 
-    getUserById: async (userId: string): Promise<unknown> => {
+    getUserById: async (userId: string): Promise<AdminUser> => {
       const res = await API.get(`/admin/users/${userId}`);
-      return unwrapResponse<unknown>(res);
+      return unwrapResponse<AdminUser>(res);
     },
 
     banUser: async (userId: string, ban: boolean): Promise<unknown> => {
@@ -307,14 +307,14 @@ export const adminService = {
       return unwrapResponse<unknown>(res);
     },
 
-    resetUserPassword: async (userId: string, newPassword: string): Promise<unknown> => {
-      const res = await API.patch(`/admin/users/${userId}/password`, { newPassword });
+    resetUserPassword: async (userId: string): Promise<unknown> => {
+      const res = await API.patch(`/admin/users/${userId}/password`);
       return unwrapResponse<unknown>(res);
     },
 
-    updateUser: async (userId: string, data: Partial<User>): Promise<unknown> => {
+    updateUser: async (userId: string, data: Partial<AdminUser>): Promise<AdminUser> => {
       const res = await API.patch(`/admin/users/${userId}`, data);
-      return unwrapResponse<unknown>(res);
+      return unwrapResponse<AdminUser>(res);
     },
 
   getDashboard: async (): Promise<unknown> => {
