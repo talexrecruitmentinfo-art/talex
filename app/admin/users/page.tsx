@@ -5,10 +5,17 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
 import { adminService } from '@/services/apiService';
+import type { User } from '@/types/auth';
+
+type AdminUser = User & {
+  _id?: string;
+  fullName?: string;
+  status?: string;
+};
 
 export default function AdminUsersPage() {
   const { user } = useAuthStore();
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actioningId, setActioningId] = useState<string | null>(null);
