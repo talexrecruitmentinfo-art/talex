@@ -14,6 +14,9 @@ function unwrapResponse<T>(response: AxiosResponse<unknown>): T {
   const body = response.data;
   const extract = (payload: unknown): unknown => {
     if (!isRecord(payload)) return payload;
+    if ('user' in payload && 'token' in payload) {
+      return payload;
+    }
     const keys = [
       'jobs',
       'job',
@@ -38,7 +41,14 @@ function unwrapResponse<T>(response: AxiosResponse<unknown>): T {
 
   if (body && typeof body === 'object') {
     if ('data' in body && body.data !== undefined) {
-      return extract(body.data) as T;
+      const dataPayload = body.data;
+      if (isRecord(dataPayload) && 'user' in dataPayload && 'token' in dataPayload) {
+        return dataPayload as T;
+      }
+      return extract(dataPayload) as T;
+    }
+    if (isRecord(body) && 'user' in body && 'token' in body) {
+      return body as T;
     }
     return extract(body) as T;
   }
