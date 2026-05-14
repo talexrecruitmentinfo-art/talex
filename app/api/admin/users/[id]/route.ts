@@ -14,7 +14,7 @@ export async function PUT(
   const authorization = request.headers.get('authorization');
   const body = await request.json();
 
-  const backendResponse = await fetch(`${backendUrl}/api/admin/users/${params.id}`, {
+  const backendResponse = await fetch(`${backendUrl}/admin/users/${params.id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

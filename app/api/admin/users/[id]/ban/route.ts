@@ -14,7 +14,7 @@ export async function POST(
   const authorization = request.headers.get('authorization');
   const body = await request.json();
 
-  const backendResponse = await fetch(`${backendUrl}/api/admin/users/${params.id}/ban`, {
+  const backendResponse = await fetch(`${backendUrl}/admin/users/${params.id}/ban`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

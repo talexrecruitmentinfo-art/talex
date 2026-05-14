@@ -13,7 +13,7 @@ export async function POST(
 
   const authorization = request.headers.get('authorization');
 
-  const backendResponse = await fetch(`${backendUrl}/api/admin/users/${params.id}/password`, {
+  const backendResponse = await fetch(`${backendUrl}/admin/users/${params.id}/password`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

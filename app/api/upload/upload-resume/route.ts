@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const authorization = request.headers.get('authorization');
 
-  const backendResponse = await fetch(`${backendUrl}/api/upload/upload-resume`, {
+  const backendResponse = await fetch(`${backendUrl}/upload/upload-resume`, {
     method: 'POST',
     headers: authorization ? { Authorization: authorization } : undefined,
     body: formData,

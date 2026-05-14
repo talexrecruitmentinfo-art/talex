@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   const authorization = request.headers.get('authorization');
   const body = await request.json();
 
-  const backendResponse = await fetch(`${backendUrl}/api/admin/support-requests/reply`, {
+  const backendResponse = await fetch(`${backendUrl}/admin/support-requests/reply`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
