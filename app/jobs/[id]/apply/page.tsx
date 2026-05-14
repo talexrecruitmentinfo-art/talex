@@ -5,10 +5,12 @@ import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { Upload, X, CheckCircle } from 'lucide-react';
+import { applicationService } from '@/services/applicationService';
 
 export default function ApplyPage() {
   const router = useRouter();
   const params = useParams();
+  const jobId = typeof params.id === 'string' ? params.id : params.id?.[0] || '';
   const { user } = useAuth();
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [passportFile, setPassportFile] = useState<File | null>(null);
@@ -24,13 +26,11 @@ export default function ApplyPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast.error(`${fileType} must be less than 5MB`);
       return;
     }
 
-    // Validate file type
     const allowedTypes: Record<string, string[]> = {
       cv: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
       passport: ['image/jpeg', 'image/jpg', 'application/pdf'],
@@ -48,31 +48,26 @@ export default function ApplyPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!cvFile || !passportFile) {
-      toast.error('CV and Passport are required');
+    if (!cvFile || !passportFile || !coverLetterFile) {
+      toast.error('CV, Passport, and Cover Letter are required');
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      // Store files in session storage or send to backend
-      const applicationData = {
-        jobId: params.id,
-        userId: user.id,
-        cvFileName: cvFile.name,
-        passportFileName: passportFile.name,
-        coverLetterFileName: coverLetterFile?.name || null,
-        appliedAt: new Date().toISOString(),
-      };
+      const formData = new FormData();
+      formData.append('cv', cvFile);
+      formData.append('passport', passportFile);
+      formData.append('coverLetter', coverLetterFile);
 
-      // In a real app, you'd upload files to backend
-      sessionStorage.setItem('applicationData', JSON.stringify(applicationData));
-      
-      toast.success('Application ready for payment!');
-      router.push(`/payment?jobId=${params.id}&applicationId=${Math.random().toString(36).substr(2, 9)}`);
+      const application = await applicationService.submitApplication(jobId, formData);
+      const applicationId = application?.id || application?._id || '';
+
+      toast.success('Application submitted successfully! Proceed to payment.');
+      router.push(`/payment?jobId=${jobId}&applicationId=${applicationId}`);
     } catch (error) {
-      toast.error('Failed to process application');
+      toast.error('Failed to submit application. Please try again.');
       console.error(error);
     } finally {
       setIsSubmitting(false);
@@ -82,22 +77,18 @@ export default function ApplyPage() {
   return (
     <div className="min-h-[calc(100vh-100px)] bg-gradient-to-br from-slate-100 via-white to-sky-100 py-12">
       <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="mb-8 text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-600">Job Application</p>
           <h1 className="mt-3 text-3xl font-bold text-slate-900">Submit Your Application</h1>
           <p className="mt-2 text-slate-600">Upload your documents to apply. The application fee is KES 500.</p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-lg">
-          {/* CV Upload */}
           <div className="space-y-3">
             <label className="block text-sm font-semibold text-slate-900">
               Curriculum Vitae (CV) <span className="text-rose-500">*</span>
             </label>
             <p className="text-xs text-slate-500">PDF, DOC, DOCX • Max 5MB</p>
-            
             <div className="relative">
               <input
                 type="file"
@@ -142,13 +133,11 @@ export default function ApplyPage() {
             </div>
           </div>
 
-          {/* Passport Upload */}
           <div className="space-y-3">
             <label className="block text-sm font-semibold text-slate-900">
               Passport Copy <span className="text-rose-500">*</span>
             </label>
             <p className="text-xs text-slate-500">JPEG, JPG, PDF • Max 5MB</p>
-            
             <div className="relative">
               <input
                 type="file"
@@ -193,13 +182,11 @@ export default function ApplyPage() {
             </div>
           </div>
 
-          {/* Cover Letter Upload (Optional) */}
           <div className="space-y-3">
             <label className="block text-sm font-semibold text-slate-900">
-              Cover Letter <span className="text-slate-400 text-xs">(Optional)</span>
+              Cover Letter <span className="text-rose-500">*</span>
             </label>
             <p className="text-xs text-slate-500">PDF, DOC, DOCX • Max 5MB</p>
-            
             <div className="relative">
               <input
                 type="file"
@@ -244,23 +231,20 @@ export default function ApplyPage() {
             </div>
           </div>
 
-          {/* Application Fee Info */}
           <div className="rounded-3xl bg-blue-50 border border-blue-200 p-4">
             <p className="text-sm text-blue-900">
               <span className="font-semibold">Application Fee:</span> KES 500 will be charged when you proceed to payment.
             </p>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
-            disabled={isSubmitting || !cvFile || !passportFile}
+            disabled={isSubmitting || !cvFile || !passportFile || !coverLetterFile}
             className="w-full rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
           >
             {isSubmitting ? 'Processing...' : 'Proceed to Payment'}
           </button>
 
-          {/* Back Link */}
           <button
             type="button"
             onClick={() => router.back()}

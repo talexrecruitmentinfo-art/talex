@@ -159,7 +159,7 @@ export const applicationService = {
   },
 
   updateStatus: async (id: string, status: ApplicationStatus): Promise<Application> => {
-    const res = await API.patch('/admin/applications/update-status', {
+    const res = await API.post('/admin/applications/update-status', {
       applicationId: id,
       status,
     });
@@ -189,7 +189,7 @@ export const supportService = {
   },
 
   reply: async (requestId: string, reply: string): Promise<unknown> => {
-    const res = await API.patch('/admin/support-requests/reply', { requestId, reply });
+    const res = await API.post('/admin/support-requests/reply', { requestId, reply });
     return unwrapResponse<unknown>(res);
   },
 };
@@ -229,7 +229,7 @@ export const notificationService = {
   },
 
   markAsRead: async (id: string): Promise<void> => {
-    await API.patch(`/notifications/read/${id}`);
+    await API.post(`/notifications/read/${id}`);
   },
 };
 
@@ -283,7 +283,7 @@ export const adminService = {
   },
 
   updateApplicationStatus: async (applicationId: string, status: ApplicationStatus): Promise<Application> => {
-    const res = await API.patch('/admin/applications/update-status', { applicationId, status });
+    const res = await API.post('/admin/applications/update-status', { applicationId, status });
     return unwrapResponse<Application>(res);
   },
 
@@ -313,17 +313,17 @@ export const adminService = {
     },
 
     banUser: async (userId: string, ban: boolean): Promise<unknown> => {
-      const res = await API.patch(`/admin/users/${userId}/ban`, { ban });
+      const res = await API.post(`/admin/users/${userId}/ban`, { ban });
       return unwrapResponse<unknown>(res);
     },
 
     resetUserPassword: async (userId: string): Promise<unknown> => {
-      const res = await API.patch(`/admin/users/${userId}/password`);
+      const res = await API.post(`/admin/users/${userId}/password`);
       return unwrapResponse<unknown>(res);
     },
 
     updateUser: async (userId: string, data: Partial<AdminUser>): Promise<AdminUser> => {
-      const res = await API.patch(`/admin/users/${userId}`, data);
+      const res = await API.put(`/admin/users/${userId}`, data);
       return unwrapResponse<AdminUser>(res);
     },
 

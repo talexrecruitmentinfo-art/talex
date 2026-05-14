@@ -2,10 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
-import PaymentModal from '@/components/shared/payment-modal';
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import { applicationService } from '@/services/apiService';
 import { jobServiceAPI } from '@/services/apiService';
 import type { Job } from '@/types/job';
 
@@ -18,7 +15,6 @@ interface JobDetailPageProps {
 export default function JobDetailPage({ params }: JobDetailPageProps) {
   const { user } = useAuthStore();
   const router = useRouter();
-  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [job, setJob] = useState<Job | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,18 +45,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
       router.push('/login');
       return;
     }
-    setPaymentModalOpen(true);
-  };
-
-  const handlePaymentSuccess = async (transactionId: string) => {
-    try {
-      await applicationService.create({ jobId: params.id, paymentId: transactionId });
-      toast.success('Payment successful! Application submitted.');
-      router.push('/applications/success?tracking=TALEX' + Math.random().toString(36).substr(2, 9).toUpperCase());
-    } catch (error) {
-      toast.error('Unable to create the application after payment. Please contact support.');
-      console.error(error);
-    }
+    router.push(`/jobs/${params.id}/apply`);
   };
 
   if (isLoading) {
@@ -129,7 +114,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
             <div className="space-y-5">
               <div className="rounded-3xl bg-white p-5 shadow-sm">
                 <p className="text-sm uppercase tracking-[0.25em] text-brand-600">Apply section</p>
-                <p className="mt-3 text-sm text-slate-600">Complete your profile and pay the application fee to submit.</p>
+                <p className="mt-3 text-sm text-slate-600">Upload your documents on the next page, then continue to payment.</p>
                 <button
                   onClick={handleApply}
                   className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-brand-500 px-5 py-3 text-sm font-semibold text-white hover:bg-brand-600"
@@ -146,14 +131,6 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
           </aside>
         </div>
       </section>
-
-      <PaymentModal
-        isOpen={paymentModalOpen}
-        jobId={job.id}
-        jobTitle={job.title}
-        onClose={() => setPaymentModalOpen(false)}
-        onSuccess={handlePaymentSuccess}
-      />
     </div>
   );
 }

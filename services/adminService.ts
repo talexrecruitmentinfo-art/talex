@@ -118,7 +118,7 @@ export const adminService = {
 
   banUser: async (userId: string, ban: boolean) => {
     try {
-      const response = await API.patch(`/admin/users/${userId}/ban`, { ban });
+      const response = await API.post(`/admin/users/${userId}/ban`, { ban });
       return unwrapResponse<unknown>(response);
     } catch (error) {
       throw error;

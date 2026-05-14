@@ -1,11 +1,26 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
-import { useState } from 'react';
 import { toast } from 'sonner';
+import type { Job } from '@/types/job';
+import { adminService } from '@/services/adminService';
 
 export default function AdminCreateJobPage() {
+  const router = useRouter();
+  const [title, setTitle] = useState('');
+  const [company, setCompany] = useState('');
+  const [category, setCategory] = useState('');
+  const [province, setProvince] = useState('');
+  const [location, setLocation] = useState('');
+  const [salary, setSalary] = useState('');
+  const [deadline, setDeadline] = useState('');
+  const [jobType, setJobType] = useState('Full-time');
+  const [experience, setExperience] = useState('Mid-level');
+  const [visaSponsorship, setVisaSponsorship] = useState('');
+  const [description, setDescription] = useState('');
   const [requirements, setRequirements] = useState<string[]>(['']);
   const [benefits, setBenefits] = useState<string[]>(['']);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,11 +44,28 @@ export default function AdminCreateJobPage() {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const jobData: Partial<Job> = {
+        title,
+        company,
+        category,
+        province,
+        location,
+        salary,
+        deadline,
+        type: jobType,
+        experience,
+        description,
+        requirements: requirements.filter(Boolean),
+        benefits: benefits.filter(Boolean),
+        sponsored: false,
+      };
+
+      await adminService.createJob(jobData);
       toast.success('Job created successfully!');
-    } catch {
-      toast.error('Failed to create job');
+      router.push('/admin/jobs');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to create job';
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -49,17 +81,17 @@ export default function AdminCreateJobPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-4">
             <label className="block text-sm font-medium text-slate-700">Title</label>
-            <Input name="title" placeholder="Job title" required />
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Job title" required />
           </div>
           <div className="space-y-4">
             <label className="block text-sm font-medium text-slate-700">Company</label>
-            <Input name="company" placeholder="Company name" required />
+            <Input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company name" required />
           </div>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-4">
             <label className="block text-sm font-medium text-slate-700">Category</label>
-            <select name="category" className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-brand-500" required>
+            <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-brand-500" required>
               <option value="">Select category</option>
               <option value="Technology">Technology</option>
               <option value="Healthcare">Healthcare</option>
@@ -70,7 +102,7 @@ export default function AdminCreateJobPage() {
           </div>
           <div className="space-y-4">
             <label className="block text-sm font-medium text-slate-700">Province</label>
-            <select name="province" className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-brand-500" required>
+            <select value={province} onChange={(e) => setProvince(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-brand-500" required>
               <option value="">Select province</option>
               <option value="Ontario">Ontario</option>
               <option value="British Columbia">British Columbia</option>
@@ -82,27 +114,54 @@ export default function AdminCreateJobPage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-4">
+            <label className="block text-sm font-medium text-slate-700">Location</label>
+            <Input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="City or region" required />
+          </div>
+          <div className="space-y-4">
+            <label className="block text-sm font-medium text-slate-700">Experience level</label>
+            <select value={experience} onChange={(e) => setExperience(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-brand-500" required>
+              <option value="Junior">Junior</option>
+              <option value="Mid-level">Mid-level</option>
+              <option value="Senior">Senior</option>
+              <option value="Director">Director</option>
+            </select>
+          </div>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-4">
             <label className="block text-sm font-medium text-slate-700">Salary</label>
-            <Input name="salary" placeholder="CA$ 45,000 - 55,000/year" required />
+            <Input value={salary} onChange={(e) => setSalary(e.target.value)} placeholder="CA$ 45,000 - 55,000/year" required />
           </div>
           <div className="space-y-4">
             <label className="block text-sm font-medium text-slate-700">Deadline</label>
-            <Input name="deadline" type="date" required />
+            <Input value={deadline} onChange={(e) => setDeadline(e.target.value)} type="date" required />
           </div>
         </div>
-        <div className="space-y-4">
-          <label className="block text-sm font-medium text-slate-700">Visa Sponsorship</label>
-          <select name="visaSponsorship" className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-brand-500" required>
-            <option value="">Select visa sponsorship</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-            <option value="Conditional">Conditional</option>
-          </select>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-4">
+            <label className="block text-sm font-medium text-slate-700">Job type</label>
+            <select value={jobType} onChange={(e) => setJobType(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-brand-500" required>
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Contract">Contract</option>
+              <option value="Temporary">Temporary</option>
+            </select>
+          </div>
+          <div className="space-y-4">
+            <label className="block text-sm font-medium text-slate-700">Visa Sponsorship</label>
+            <select value={visaSponsorship} onChange={(e) => setVisaSponsorship(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-brand-500" required>
+              <option value="">Select visa sponsorship</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+              <option value="Conditional">Conditional</option>
+            </select>
+          </div>
         </div>
         <div className="space-y-4">
           <label className="block text-sm font-medium text-slate-700">Description</label>
           <textarea
-            name="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             className="min-h-[140px] w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-brand-500"
             placeholder="Describe the role and sponsorship details."
             required
