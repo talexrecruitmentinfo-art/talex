@@ -306,8 +306,22 @@ export const adminService = {
   },
 
   replySupportRequest: async (requestId: string, reply: string): Promise<unknown> => {
-    const res = await API.patch('/admin/support-requests/reply', { requestId, reply });
-    return unwrapResponse<unknown>(res);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : undefined;
+    const response = await fetch('/api/admin/support-requests/reply', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ requestId, reply }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Failed to reply to support request');
+    }
+
+    return response.json();
   },
 
   getUsers: async (): Promise<AdminUser[]> => {

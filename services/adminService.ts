@@ -118,8 +118,67 @@ export const adminService = {
 
   banUser: async (userId: string, ban: boolean) => {
     try {
-      const response = await API.post(`/admin/users/${userId}/ban`, { ban });
-      return unwrapResponse<unknown>(response);
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : undefined;
+      const response = await fetch(`/api/admin/users/${userId}/ban`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ ban }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to ban/unban user');
+      }
+
+      return response.json();
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  resetUserPassword: async (userId: string) => {
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : undefined;
+      const response = await fetch(`/api/admin/users/${userId}/password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to reset user password');
+      }
+
+      return response.json();
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  updateUser: async (userId: string, userData: Record<string, unknown>) => {
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : undefined;
+      const response = await fetch(`/api/admin/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to update user');
+      }
+
+      return response.json();
     } catch (error) {
       throw error;
     }
