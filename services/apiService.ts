@@ -257,14 +257,22 @@ export const paymentService = {
  */
 export const uploadService = {
   uploadResume: async (file: File): Promise<{ fileUrl?: string }> => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : undefined;
     const formData = new FormData();
     formData.append('resume', file);
-    const res = await API.post('/upload/upload-resume', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+
+    const response = await fetch('/api/upload/upload-resume', {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      body: formData,
     });
-    return unwrapResponse<{ fileUrl?: string }>(res);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Failed to upload resume');
+    }
+
+    return response.json();
   },
 
   getDocuments: async (): Promise<unknown[]> => {
