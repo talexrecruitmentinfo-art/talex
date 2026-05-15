@@ -50,7 +50,9 @@ export default function Navbar({ onMenuClick, showNotifications = true, showProf
         ) : (
           <div className="text-white font-semibold text-center">
             <p className="text-xs uppercase tracking-[0.3em] text-government-gray">Welcome</p>
-            <p className="text-lg">{user?.firstName || 'Applicant'}</p>
+            <p className="text-lg">
+              {user?.role === 'ADMIN' ? 'Administrator' : user?.firstName || 'Applicant'}
+            </p>
           </div>
         )}
 

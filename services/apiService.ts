@@ -344,6 +344,11 @@ export const adminService = {
       return unwrapResponse<unknown>(res);
     },
 
+    deleteUser: async (userId: string): Promise<unknown> => {
+      const res = await API.delete(`/admin/users/${userId}`);
+      return unwrapResponse<unknown>(res);
+    },
+
     updateUser: async (userId: string, data: Partial<AdminUser>): Promise<AdminUser> => {
       const res = await API.put(`/admin/users/${userId}`, data);
       return unwrapResponse<AdminUser>(res);

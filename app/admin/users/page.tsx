@@ -79,6 +79,23 @@ export default function AdminUsersPage() {
     }
   };
 
+  const handleDelete = async (userId: string) => {
+    if (actioningId) return;
+    if (!window.confirm('Delete this user permanently? This action cannot be undone.')) return;
+
+    try {
+      setActioningId(userId);
+      await adminService.deleteUser(userId);
+      setUsers((prev) => prev.filter((userItem) => getUserId(userItem) !== userId));
+      toast.success('User deleted successfully');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to delete user';
+      toast.error(message);
+    } finally {
+      setActioningId(null);
+    }
+  };
+
   if (!user) {
     return (
       <div className="rounded-[32px] border border-slate-200 bg-white p-8 text-center">
@@ -119,11 +136,20 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="space-y-6 rounded-[32px] border border-slate-200 bg-white p-8 shadow-card sm:p-10">
-      <div className="space-y-3">
-        <p className="text-sm uppercase tracking-[0.25em] text-brand-600">Users</p>
-        <h1 className="text-3xl font-semibold text-slate-900">Manage registered users</h1>
-        <p className="text-sm text-slate-600 mt-2">Ban, edit, or reset passwords for your user accounts.</p>
+    <div className="space-y-8">
+      <div className="rounded-3xl bg-gradient-to-r from-government-primary to-government-secondary p-8 text-white shadow-government">
+        <p className="text-sm uppercase tracking-[0.3em] text-government-gray">Administration</p>
+        <h1 className="mt-3 text-3xl font-semibold">Welcome back, Admin</h1>
+        <p className="mt-2 max-w-2xl text-government-gray">Manage registered users and take official administrative actions.</p>
+      </div>
+
+      <div className="rounded-[32px] border border-government-gray bg-white p-8 shadow-government sm:p-10">
+        <div className="space-y-3">
+          <p className="text-sm uppercase tracking-[0.25em] text-government-primary">Users</p>
+          <h1 className="text-3xl font-semibold text-government-dark">Manage registered users</h1>
+          <p className="text-sm text-government-gray mt-2">Ban, delete, or reset passwords for your user accounts.</p>
+        </div>
+      
       </div>
 
       <div className="overflow-x-auto">
@@ -165,10 +191,18 @@ export default function AdminUsersPage() {
                       <button
                         type="button"
                         onClick={() => handleBan(userId)}
-                        disabled={actioningId === userId || status.toLowerCase() === 'banned'}
+                        disabled={actioningId === userId || status.toLowerCase() === 'banned' || getUserId(userItem) === getUserId(user)}
                         className="inline-flex rounded-full bg-amber-100 px-3 py-2 text-xs font-semibold text-amber-700 hover:bg-amber-200 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {status.toLowerCase() === 'banned' ? 'Banned' : 'Ban'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(userId)}
+                        disabled={actioningId === userId || getUserId(userItem) === getUserId(user)}
+                        className="inline-flex rounded-full bg-red-100 px-3 py-2 text-xs font-semibold text-red-700 hover:bg-red-200 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        Delete
                       </button>
                       <button
                         type="button"
