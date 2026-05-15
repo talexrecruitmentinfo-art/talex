@@ -37,28 +37,28 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-card sm:p-10">
+      <section className="rounded-[32px] border border-government-gray bg-white p-8 shadow-government sm:p-10">
         <div className="space-y-3 mb-6">
-          <p className="text-sm uppercase tracking-[0.25em] text-brand-600">Resume</p>
-          <h2 className="text-xl font-semibold text-slate-900">Your Resume</h2>
+          <p className="text-sm uppercase tracking-[0.25em] text-government-primary">Documents</p>
+          <h2 className="text-xl font-semibold text-government-dark">Your Resume</h2>
         </div>
-        <div className="flex items-center justify-between bg-slate-50 rounded-lg p-4">
+        <div className="flex items-center justify-between bg-government-light rounded-lg p-4">
           <div>
-            <p className="text-sm text-slate-600 mb-2">Download your uploaded resume</p>
+            <p className="text-sm text-government-gray mb-2">Download your uploaded resume</p>
             <ResumeButton resumeUrl={user?.resume} />
           </div>
         </div>
       </section>
 
-      <section className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-card sm:p-10">
+      <section className="rounded-[32px] border border-government-gray bg-white p-8 shadow-government sm:p-10">
         <div className="space-y-3">
-          <p className="text-sm uppercase tracking-[0.25em] text-brand-600">Profile</p>
-          <h1 className="text-3xl font-semibold text-slate-900">Your profile details</h1>
+          <p className="text-sm uppercase tracking-[0.25em] text-government-primary">Personal Information</p>
+          <h1 className="text-3xl font-semibold text-government-dark">Your profile details</h1>
         </div>
         <form className="grid gap-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Full name</label>
+              <label className="block text-sm font-medium text-government-dark">Full name</label>
               <Input 
                 placeholder="John Doe"
                 {...register('fullName')}
@@ -69,7 +69,7 @@ export default function ProfilePage() {
               )}
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Date of birth</label>
+              <label className="block text-sm font-medium text-government-dark">Date of birth</label>
               <Input 
                 type="date"
                 {...register('dateOfBirth')}
@@ -82,7 +82,7 @@ export default function ProfilePage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Phone</label>
+              <label className="block text-sm font-medium text-government-dark">Phone</label>
               <Input 
                 placeholder="+254712345678"
                 {...register('phone')}
@@ -93,7 +93,7 @@ export default function ProfilePage() {
               )}
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Email</label>
+              <label className="block text-sm font-medium text-government-dark">Email</label>
               <Input 
                 type="email" 
                 placeholder="name@example.com"

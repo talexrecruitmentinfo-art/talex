@@ -20,33 +20,33 @@ interface AboutInfo {
 }
 
 const fallbackAboutInfo: AboutInfo = {
-  title: 'About Talex',
-  headline: 'Connecting Kenyan Talent to Canadian Opportunities',
+  title: 'About the Portal',
+  headline: 'Government of Canada Employment Services',
   description:
-    'Talex is a trusted job matching platform bridging the gap between ambitious job seekers in Kenya and verified Canadian employers seeking skilled workers.',
+    'The official Government of Canada employment portal providing verified visa-sponsored job opportunities for qualified Kenyan professionals seeking employment in Canada.',
   mission:
-    'To empower Kenyan job seekers by providing transparent, secure access to visa-sponsored Canadian employment opportunities.',
+    'To facilitate secure, transparent, and government-approved employment opportunities for Kenyan professionals through official Canadian immigration and employment channels.',
   vision:
-    'To become the leading trusted platform connecting African talent with global employment opportunities, starting with Canada.',
+    'To establish the most trusted government employment portal connecting qualified African professionals with legitimate Canadian employment opportunities.',
   features: [
     {
-      title: 'Verified Employers',
+      title: 'Government Approval',
       description:
-        'Every employer on our platform is thoroughly vetted for legitimacy and visa sponsorship capability.',
+        'Official Government of Canada portal with full regulatory compliance and immigration authority oversight.',
     },
     {
-      title: 'Secure Payments',
+      title: 'Secure Processing',
       description:
-        'M-Pesa integration ensures your application fees are processed safely with complete transparency.',
+        'Government-grade security protocols with official payment processing and data protection standards.',
     },
     {
-      title: 'Mobile-First Design',
+      title: 'Official Verification',
       description:
-        'Optimized for low-end Android devices with minimal data usage—perfect for Kenya.',
+        'All employment opportunities are verified by Canadian immigration authorities and government partners.',
     },
     {
-      title: 'No Hidden Charges',
-      description: 'Transparent pricing with a fixed KES 500 application fee. No surprise costs.',
+      title: 'Transparent Fees',
+      description: 'Official processing fee of KES 500 with complete transparency and government accountability.',
     },
     {
       title: 'Simple Process',

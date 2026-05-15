@@ -6,40 +6,40 @@ export default function Footer() {
 
   const footerLinks = [
     {
-      label: 'Company',
+      label: 'Government Services',
       links: [
-        { href: '/about', label: 'About Us' },
-        { href: '/how-it-works', label: 'How It Works' },
-        { href: '/contact', label: 'Contact' },
+        { href: '/about', label: 'About the Portal' },
+        { href: '/how-it-works', label: 'Application Process' },
+        { href: '/contact', label: 'Contact Information' },
       ],
     },
     {
-      label: 'Resources',
+      label: 'Legal & Support',
       links: [
         { href: '/privacy-policy', label: 'Privacy Policy' },
         { href: '/terms', label: 'Terms of Service' },
-        { href: '/report', label: 'Report Issue' },
+        { href: '/report', label: 'Report an Issue' },
       ],
     },
     {
-      label: 'Contact',
+      label: 'Contact Information',
       content: (
-        <div className="space-y-2 text-sm text-slate-600">
+        <div className="space-y-2 text-sm text-government-gray">
           <div className="flex items-center gap-2">
             <Mail className="h-4 w-4" />
-            <a href="mailto:support@talex.com" className="hover:text-navy-600">
-              support@talex.com
+            <a href="mailto:employment@gov.ca" className="hover:text-government-primary">
+              employment@gov.ca
             </a>
           </div>
           <div className="flex items-center gap-2">
             <Phone className="h-4 w-4" />
-            <a href="tel:+254700000000" className="hover:text-navy-600">
+            <a href="tel:+254700000000" className="hover:text-government-primary">
               +254 (0) 700 000 000
             </a>
           </div>
           <div className="flex items-start gap-2">
             <MapPin className="h-4 w-4 mt-0.5" />
-            <span>Nairobi, Kenya</span>
+            <span>Government of Canada Employment Services<br />Nairobi, Kenya</span>
           </div>
         </div>
       ),
@@ -47,17 +47,17 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="border-t border-slate-200 bg-navy-500 text-white">
+    <footer className="border-t border-government-gray bg-government-primary text-white">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {/* Top Section */}
         <div className="mb-12 grid gap-8 md:grid-cols-4">
           {/* Brand */}
           <div className="md:col-span-1">
             <Link href="/" className="inline-block font-bold text-xl">
-              Talex <span className="text-brand-400">Jobs</span>
+              Government of Canada
             </Link>
-            <p className="mt-3 text-sm text-blue-100">
-              Canada employment portal connecting Kenyan professionals with verified opportunities.
+            <p className="mt-3 text-sm text-government-gray">
+              Official employment portal for qualified Kenyan professionals seeking visa-sponsored opportunities in Canada.
             </p>
           </div>
 
@@ -73,7 +73,7 @@ export default function Footer() {
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="text-sm text-blue-100 hover:text-white transition"
+                        className="text-sm text-government-gray hover:text-white transition"
                       >
                         {link.label}
                       </Link>
@@ -86,12 +86,12 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-blue-700" />
+        <div className="border-t border-government-secondary" />
 
         {/* Bottom Section */}
         <div className="mt-8 flex flex-col items-center justify-between gap-6 sm:flex-row">
-          <p className="text-sm text-blue-100">
-            © {currentYear} Talex. All rights reserved. Made for Kenyan professionals.
+          <p className="text-sm text-government-gray">
+            © {currentYear} Government of Canada. All rights reserved. Official employment services for Kenyan professionals.
           </p>
 
           {/* Social */}

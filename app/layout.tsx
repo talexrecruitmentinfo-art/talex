@@ -4,8 +4,8 @@ import PublicLayout from '@/components/shared/layouts/public-layout';
 import { ToastProvider } from '@/components/shared/toast-provider';
 
 export const metadata: Metadata = {
-  title: 'Talex | Canada Jobs for Kenyan Applicants',
-  description: 'Mobile-first job application platform connecting Kenyan job seekers with verified Canada positions.',
+  title: 'Government of Canada - Employment Portal for Kenyan Professionals',
+  description: 'Official Canadian employment portal for qualified Kenyan professionals. Apply for visa-sponsored positions with secure processing and government oversight.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -21,7 +21,7 @@ export default function JobsPage() {
   if (!isReady) {
     return (
       <div className="flex min-h-[calc(100vh-100px)] items-center justify-center">
-        <div className="text-slate-600">Loading...</div>
+        <div className="text-government-gray">Loading...</div>
       </div>
     );
   }
@@ -33,12 +33,12 @@ export default function JobsPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="rounded-2xl bg-gradient-to-r from-navy-500 to-navy-600 p-8 text-white shadow-lg">
-        <h1 className="text-4xl font-bold">Browse Canada Jobs</h1>
-        <p className="mt-2 text-blue-100">Verified opportunities for Kenyan professionals</p>
-        <div className="mt-4 inline-flex bg-white/20 px-4 py-2 rounded-lg text-blue-100">
+      <div className="rounded-2xl bg-gradient-to-r from-government-primary to-government-secondary p-8 text-white shadow-government">
+        <h1 className="text-4xl font-bold">Employment Opportunities</h1>
+        <p className="mt-2 text-government-gray">Official Canadian positions for qualified Kenyan professionals</p>
+        <div className="mt-4 inline-flex bg-white/20 px-4 py-2 rounded-lg text-government-gray">
           <span className="font-semibold">{jobs.length}+</span>
-          <span className="ml-2">Active positions</span>
+          <span className="ml-2">Verified positions</span>
         </div>
       </div>
 

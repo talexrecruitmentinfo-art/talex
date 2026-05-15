@@ -21,7 +21,7 @@ export default function ApplicationsPage() {
   if (!isReady) {
     return (
       <div className="flex min-h-[calc(100vh-100px)] items-center justify-center">
-        <div className="text-slate-600">Loading your dashboard...</div>
+        <div className="text-government-gray">Loading your portal...</div>
       </div>
     );
   }
@@ -33,9 +33,9 @@ export default function ApplicationsPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="rounded-2xl bg-gradient-to-r from-navy-500 to-navy-600 p-8 text-white shadow-lg">
-        <h1 className="text-3xl font-bold">Your Applications</h1>
-        <p className="mt-2 text-blue-100">Track your Canada job application progress</p>
+      <div className="rounded-2xl bg-gradient-to-r from-government-primary to-government-secondary p-8 text-white shadow-government">
+        <h1 className="text-3xl font-bold">Application Status</h1>
+        <p className="mt-2 text-government-gray">Official tracking of your Canadian employment applications</p>
       </div>
 
       {error && (
@@ -45,7 +45,7 @@ export default function ApplicationsPage() {
       )}
 
       {isLoading ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-600 shadow-soft">
+        <div className="rounded-2xl border border-government-gray bg-white p-8 text-center text-government-gray shadow-government">
           Loading your applications...
         </div>
       ) : applications.length === 0 ? (

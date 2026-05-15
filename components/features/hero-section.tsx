@@ -2,37 +2,37 @@ import { Shield, Globe, Zap } from 'lucide-react';
 
 export default function HeroSection() {
   return (
-    <section className="rounded-2xl bg-gradient-to-r from-navy-500 to-navy-600 px-6 py-12 shadow-lg sm:px-10 sm:py-16">
+    <section className="rounded-2xl bg-gradient-to-r from-government-primary to-government-secondary px-6 py-12 shadow-government sm:px-10 sm:py-16">
       <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
         {/* Left Side - Content */}
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-blue-400/20 px-4 py-2 border border-blue-300/30">
-            <span className="h-2 w-2 bg-yellow-300 rounded-full"></span>
-            <span className="text-sm font-medium text-white">Official Canada Job Portal for Kenyans</span>
+          <div className="inline-flex items-center gap-2 rounded-full bg-government-accent/20 px-4 py-2 border border-government-accent/30">
+            <span className="h-2 w-2 bg-government-accent rounded-full"></span>
+            <span className="text-sm font-medium text-white">Official Government of Canada Employment Portal</span>
           </div>
 
           <h1 className="mt-6 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Canada Employment Portal
+            Employment Opportunities in Canada
           </h1>
 
-          <p className="mt-6 text-lg text-blue-100">
-            Apply for verified visa-sponsored opportunities from Kenya. Secure payments. Fast processing. Professional support.
+          <p className="mt-6 text-lg text-government-gray">
+            Apply for verified visa-sponsored positions through the official Canadian government employment portal. Secure processing, professional support, and government oversight.
           </p>
 
           {/* Trust Indicators */}
           <div className="mt-10 grid gap-4 sm:grid-cols-3">
             {[
-              { icon: Shield, label: 'Secure & Verified' },
-              { icon: Globe, label: 'Government-Approved' },
+              { icon: Shield, label: 'Government Approved' },
+              { icon: Globe, label: 'Official Portal' },
               { icon: Zap, label: 'Fast Processing' },
             ].map((item, idx) => {
               const Icon = item.icon;
               return (
                 <div key={idx} className="flex items-center gap-3">
-                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-yellow-300/20">
-                    <Icon className="h-5 w-5 text-yellow-300" />
+                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-government-accent/20">
+                    <Icon className="h-5 w-5 text-government-accent" />
                   </div>
-                  <span className="text-sm font-medium text-blue-100">{item.label}</span>
+                  <span className="text-sm font-medium text-government-gray">{item.label}</span>
                 </div>
               );
             })}
@@ -41,12 +41,12 @@ export default function HeroSection() {
 
         {/* Right Side - Info Card */}
         <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 p-8 shadow-xl">
-          <h3 className="text-xl font-semibold text-white mb-6">Quick Application Steps</h3>
+          <h3 className="text-xl font-semibold text-white mb-6">Application Process</h3>
           <div className="space-y-4">
             {[
-              { num: '1', text: 'Create your profile' },
-              { num: '2', text: 'Browse verified jobs' },
-              { num: '3', text: 'Pay Ksh 500 fee' },
+              { num: '1', text: 'Create your official profile' },
+              { num: '2', text: 'Browse verified positions' },
+              { num: '3', text: 'Pay processing fee: Ksh 500' },
               { num: '4', text: 'Submit application' },
               { num: '5', text: 'Track progress' },
             ].map((step) => (

@@ -29,12 +29,12 @@ export default function Navbar({ onMenuClick, showNotifications = true, showProf
   };
 
   return (
-    <header className="sticky top-0 z-40 h-navbar border-b border-slate-200 bg-navy-700 shadow-md">
+    <header className="sticky top-0 z-40 h-navbar border-b border-government-gray bg-government-primary shadow-government">
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6">
         {/* Left: Hamburger Menu */}
         <button
           onClick={handleMenuClick}
-          className="inline-flex items-center justify-center rounded-lg p-2 text-white hover:bg-navy-800 transition"
+          className="inline-flex items-center justify-center rounded-lg p-2 text-white hover:bg-government-secondary transition"
           aria-label="Toggle menu"
         >
           <Menu className="h-6 w-6" />
@@ -43,14 +43,14 @@ export default function Navbar({ onMenuClick, showNotifications = true, showProf
         {/* Center: Logo or Title */}
         {!isAuthenticated ? (
           <Link href="/" className="flex items-center gap-2 text-white font-bold text-lg sm:text-xl">
-            <span className="hidden sm:inline">Talex</span>
-            <span className="sm:hidden">T</span>
-            <span className="text-brand-400 ml-1">Jobs</span>
+            <span className="hidden sm:inline">Government of Canada</span>
+            <span className="sm:hidden">GoC</span>
+            <span className="text-government-accent ml-1">Employment Portal</span>
           </Link>
         ) : (
           <div className="text-white font-semibold text-center">
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-300">Welcome</p>
-            <p className="text-lg">{user?.firstName || 'Portal'}</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-government-gray">Welcome</p>
+            <p className="text-lg">{user?.firstName || 'Applicant'}</p>
           </div>
         )}
 
@@ -59,7 +59,7 @@ export default function Navbar({ onMenuClick, showNotifications = true, showProf
           {!isAuthenticated && (
             <Link
               href="/register"
-              className="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-navy-700 transition hover:bg-slate-100"
+              className="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-government-primary transition hover:bg-government-gray-light"
             >
               Register
             </Link>
@@ -77,7 +77,7 @@ export default function Navbar({ onMenuClick, showNotifications = true, showProf
           {isAuthenticated && showProfile && (
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-white hover:bg-navy-800 transition font-medium text-sm"
+              className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-white hover:bg-government-secondary transition font-medium text-sm"
               aria-label="Logout"
             >
               <LogOut className="h-5 w-5" />
@@ -87,11 +87,11 @@ export default function Navbar({ onMenuClick, showNotifications = true, showProf
 
           {!isAuthenticated && showNotifications && (
             <button
-              className="relative inline-flex items-center justify-center rounded-lg p-2 text-white hover:bg-navy-800 transition"
+              className="relative inline-flex items-center justify-center rounded-lg p-2 text-white hover:bg-government-secondary transition"
               aria-label="Notifications"
             >
               <Bell className="h-5 w-5" />
-              <span className="absolute top-1 right-1 h-2 w-2 bg-government-secondary rounded-full"></span>
+              <span className="absolute top-1 right-1 h-2 w-2 bg-government-accent rounded-full"></span>
             </button>
           )}
         </div>

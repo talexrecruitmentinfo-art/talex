@@ -24,7 +24,7 @@ export default function PublicLayout({ children }: PropsWithChildren<unknown>) {
   const hidePublicFooter = isAuthenticated;
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-screen bg-government-light text-government-dark">
       {!hidePublicHeader && (
         <>
           <Navbar

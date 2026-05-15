@@ -31,7 +31,7 @@ export default function AdminLayout({ children }: PropsWithChildren<unknown>) {
 
   return (
     <ProtectedRoute requiredRole="ADMIN">
-      <div className="min-h-screen bg-slate-50 text-slate-900">
+      <div className="min-h-screen bg-government-light text-government-dark">
         <Navbar 
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
           isAuthenticated={true}
@@ -42,7 +42,7 @@ export default function AdminLayout({ children }: PropsWithChildren<unknown>) {
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
           items={adminMenuItems}
-          title="Admin Portal"
+          title="Government Administration"
           onLogout={logout}
         />
         <main className="pt-navbar mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

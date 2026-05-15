@@ -3,40 +3,40 @@ import { FileCheck, Clock, CheckCircle, Bookmark, Bell, Sparkles } from 'lucide-
 
 export default function DashboardPage() {
   const stats = [
-    { icon: FileCheck, label: 'Applications', value: '18', detail: '3 new this week', color: 'brand' },
-    { icon: Clock, label: 'Pending review', value: '6', detail: 'Waiting for feedback', color: 'blue' },
-    { icon: CheckCircle, label: 'Offers', value: '2', detail: 'Review before you accept', color: 'green' },
-    { icon: Bell, label: 'Notifications', value: '5', detail: 'New messages and updates', color: 'yellow' },
+    { icon: FileCheck, label: 'Applications Submitted', value: '18', detail: '3 new this week', color: 'government' },
+    { icon: Clock, label: 'Under Review', value: '6', detail: 'Awaiting assessment', color: 'blue' },
+    { icon: CheckCircle, label: 'Offers Received', value: '2', detail: 'Ready for consideration', color: 'green' },
+    { icon: Bell, label: 'Notifications', value: '5', detail: 'Official updates', color: 'yellow' },
   ];
 
   const activityRows = [
-    { job: 'Senior Frontend Dev', company: 'MapleTech', status: 'Reviewed', date: 'May 1, 2024' },
-    { job: 'Project Manager', company: 'Global Co', status: 'Submitted', date: 'Apr 28, 2024' },
-    { job: 'UX Designer', company: 'Design Inc', status: 'Approved', date: 'Apr 25, 2024' },
+    { job: 'Senior Frontend Developer', company: 'MapleTech Solutions', status: 'Under Review', date: 'May 1, 2026' },
+    { job: 'Project Manager', company: 'Global Enterprises Ltd', status: 'Application Received', date: 'Apr 28, 2026' },
+    { job: 'UX Designer', company: 'Design Innovations Inc', status: 'Approved', date: 'Apr 25, 2026' },
   ];
 
   const timelineSteps = [
-    { title: 'Applied', description: 'Your application has been submitted', completed: true },
-    { title: 'Interview', description: 'Waiting for interview schedule', completed: true },
-    { title: 'Offer', description: 'Offer decision expected soon', completed: false },
-    { title: 'Onboarding', description: 'Complete onboarding documents', completed: false },
+    { title: 'Application Submitted', description: 'Your application has been officially received', completed: true },
+    { title: 'Document Verification', description: 'Documents are being verified by authorities', completed: true },
+    { title: 'Interview Process', description: 'Interview scheduling in progress', completed: false },
+    { title: 'Final Decision', description: 'Awaiting final approval decision', completed: false },
   ];
 
   return (
     <div className="space-y-8">
-      <div className="rounded-3xl bg-gradient-to-r from-navy-600 to-brand-500 p-8 text-white shadow-xl">
+      <div className="rounded-3xl bg-gradient-to-r from-government-primary to-government-secondary p-8 text-white shadow-government">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-blue-200">Welcome back, John!</p>
-            <h1 className="mt-3 text-4xl font-semibold">Your application hub</h1>
-            <p className="mt-3 max-w-2xl text-slate-200">See the latest updates for your job applications, recommended roles, and next steps.</p>
+            <p className="text-sm uppercase tracking-[0.3em] text-government-gray">Welcome to your portal</p>
+            <h1 className="mt-3 text-4xl font-semibold">Applicant Dashboard</h1>
+            <p className="mt-3 max-w-2xl text-government-gray">Access your official application status, track progress, and manage your Canadian employment opportunities.</p>
           </div>
-          <div className="flex items-center gap-4 rounded-3xl bg-white/10 px-6 py-5 shadow-soft ring-1 ring-white/20">
-            <div className="rounded-2xl bg-white/15 p-3 text-brand-100">
+          <div className="flex items-center gap-4 rounded-3xl bg-white/10 px-6 py-5 shadow-government ring-1 ring-white/20">
+            <div className="rounded-2xl bg-white/15 p-3 text-government-accent">
               <Sparkles className="h-7 w-7" />
             </div>
             <div>
-              <p className="text-sm text-slate-200">Application success rate</p>
+              <p className="text-sm text-government-gray">Success Rate</p>
               <p className="text-2xl font-semibold">78%</p>
             </div>
           </div>
@@ -47,52 +47,52 @@ export default function DashboardPage() {
         {stats.map((stat, idx) => {
           const Icon = stat.icon;
           const colorStyles = {
-            brand: 'bg-brand-50 text-brand-600',
+            government: 'bg-government-primary/10 text-government-primary',
             blue: 'bg-blue-50 text-blue-600',
             green: 'bg-emerald-50 text-emerald-600',
             yellow: 'bg-yellow-50 text-amber-600',
           } as const;
 
           return (
-            <div key={idx} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-soft transition hover:shadow-card">
+            <div key={idx} className="rounded-3xl border border-government-gray bg-white p-6 shadow-government transition hover:shadow-card">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-slate-500">{stat.label}</p>
-                  <p className="mt-3 text-3xl font-semibold text-slate-900">{stat.value}</p>
+                  <p className="text-sm font-medium text-government-gray">{stat.label}</p>
+                  <p className="mt-3 text-3xl font-semibold text-government-dark">{stat.value}</p>
                 </div>
                 <div className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl ${colorStyles[stat.color as keyof typeof colorStyles]}`}>
                   <Icon className="h-5 w-5" />
                 </div>
               </div>
-              <p className="mt-4 text-sm text-slate-500">{stat.detail}</p>
+              <p className="mt-4 text-sm text-government-gray">{stat.detail}</p>
             </div>
           );
         })}
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
-        <section className="space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-soft">
+        <section className="space-y-6 rounded-3xl border border-government-gray bg-white p-6 shadow-government">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-slate-900">Application progress</h2>
-              <p className="text-sm text-slate-500">Track the next stages for your top application.</p>
+              <h2 className="text-xl font-semibold text-government-dark">Application Progress</h2>
+              <p className="text-sm text-government-gray">Official status of your current application process.</p>
             </div>
-            <Link href="/dashboard/applications" className="text-sm font-semibold text-brand-600 hover:text-brand-700">View all</Link>
+            <Link href="/dashboard/applications" className="text-sm font-semibold text-government-primary hover:text-government-secondary">View all applications</Link>
           </div>
           <div className="space-y-4">
             {timelineSteps.map((step, idx) => (
               <div key={idx} className="flex items-start gap-4">
-                <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-900">
+                <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-2xl border border-government-gray bg-government-light text-sm font-semibold text-government-dark">
                   {idx + 1}
                 </div>
                 <div className="grow">
                   <div className="flex items-center justify-between gap-4">
-                    <h3 className="text-sm font-semibold text-slate-900">{step.title}</h3>
-                    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${step.completed ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
-                      {step.completed ? 'Completed' : 'Pending'}
+                    <h3 className="text-sm font-semibold text-government-dark">{step.title}</h3>
+                    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${step.completed ? 'bg-green-100 text-green-700' : 'bg-government-gray text-government-dark'}`}>
+                      {step.completed ? 'Completed' : 'In Progress'}
                     </span>
                   </div>
-                  <p className="mt-1 text-sm text-slate-600">{step.description}</p>
+                  <p className="mt-1 text-sm text-government-gray">{step.description}</p>
                 </div>
               </div>
             ))}
