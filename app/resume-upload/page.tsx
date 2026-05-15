@@ -2,15 +2,21 @@
 
 import { ChangeEvent, useState } from 'react';
 import Link from 'next/link';
+import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { uploadService } from '@/services/apiService';
+import { profileService, uploadService } from '@/services/apiService';
 import { getErrorMessage } from '@/utils/helpers';
 
 export default function ResumeUploadPage() {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
+  const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
+  const [uploadedResumeUrl, setUploadedResumeUrl] = useState<string | null>(null);
 
   const handleResumeChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
@@ -53,7 +59,10 @@ export default function ResumeUploadPage() {
 
     try {
       const data = await uploadService.uploadResume(resumeFile);
-      setUploadSuccess(data.fileUrl || 'Resume uploaded successfully.');
+      setUploadedResumeUrl(data.fileUrl || null);
+      setUploadSuccess(data.fileUrl ? 'Resume uploaded successfully. Please save it to your profile.' : 'Resume uploaded successfully.');
+      setSaveSuccess(null);
+      setSaveError(null);
       toast.success('Resume uploaded successfully!');
       setResumeFile(null);
     } catch (error: unknown) {
@@ -61,6 +70,26 @@ export default function ResumeUploadPage() {
       toast.error('Resume upload failed.');
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleSaveResume = async () => {
+    if (!uploadedResumeUrl) return;
+
+    setSaving(true);
+    setSaveError(null);
+    setSaveSuccess(null);
+
+    try {
+      await profileService.update({ cv: uploadedResumeUrl });
+      setSaveSuccess('Resume saved to your profile successfully.');
+      toast.success('Resume saved successfully!');
+      setShowSaveConfirm(false);
+    } catch (error: unknown) {
+      setSaveError(getErrorMessage(error, 'Failed to save resume.'));
+      toast.error('Failed to save resume.');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -102,6 +131,18 @@ export default function ResumeUploadPage() {
               </div>
             )}
 
+            {saveError && (
+              <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                {saveError}
+              </div>
+            )}
+
+            {saveSuccess && (
+              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700">
+                {saveSuccess}
+              </div>
+            )}
+
             <button
               type="button"
               onClick={handleResumeUpload}
@@ -110,7 +151,83 @@ export default function ResumeUploadPage() {
             >
               {uploading ? 'Uploading...' : 'Upload Resume'}
             </button>
+
+            {uploadedResumeUrl && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setShowSaveConfirm(true)}
+                  disabled={saving}
+                  className="inline-flex w-full items-center justify-center rounded-full bg-government-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-government-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {saving ? 'Saving...' : 'Save Resume'}
+                </button>
+                <a
+                  href={uploadedResumeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex w-full items-center justify-center rounded-full border border-government-primary bg-white px-5 py-3 text-sm font-semibold text-government-dark transition hover:bg-government-light"
+                >
+                  Preview Uploaded Resume
+                </a>
+              </>
+            )}
           </div>
+
+          <AnimatePresence>
+            {showSaveConfirm && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-40 bg-black/40"
+                  onClick={() => setShowSaveConfirm(false)}
+                />
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 20, scale: 0.98 }}
+                  className="fixed inset-0 z-50 flex items-center justify-center p-4"
+                >
+                  <div className="w-full max-w-xl rounded-[32px] border border-slate-200 bg-white p-8 shadow-[0_30px_80px_rgba(15,23,42,0.18)]">
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-sm uppercase tracking-[0.35em] text-government-primary">Confirm Save</p>
+                        <h2 className="mt-2 text-2xl font-semibold text-slate-900">Save uploaded resume</h2>
+                        <p className="mt-3 text-sm text-slate-600">
+                          This will attach the uploaded resume to your profile so it can be used for applications.
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl bg-government-light p-4 text-sm text-government-dark">
+                        <p className="font-semibold">Resume URL</p>
+                        <p className="truncate pt-1">{uploadedResumeUrl}</p>
+                      </div>
+
+                      <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                        <button
+                          type="button"
+                          onClick={() => setShowSaveConfirm(false)}
+                          className="inline-flex w-full items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 sm:w-auto"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleSaveResume}
+                          disabled={saving}
+                          className="inline-flex w-full items-center justify-center rounded-full bg-government-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-government-secondary disabled:opacity-50 disabled:cursor-not-allowed sm:w-auto"
+                        >
+                          {saving ? 'Saving...' : 'Confirm Save'}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
 
           <div className="rounded-3xl bg-slate-50 p-4 text-sm text-slate-600">
             <p className="font-semibold text-slate-900">Need to send a message instead?</p>
